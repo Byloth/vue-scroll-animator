@@ -28,7 +28,7 @@ export default class ScrollAnimation
 
     protected _enabled: boolean;
 
-    protected _target?: HTMLElement;
+    protected _target: HTMLElement;
     protected _startValue: number;
     protected _endValue?: number;
 
@@ -42,7 +42,7 @@ export default class ScrollAnimation
 
         this._enabled = true;
 
-        this._target = options.target;
+        this._target = options.target!;
         this._startValue = options.startValue;
         this._endValue = options.endValue;
 
@@ -86,11 +86,7 @@ export default class ScrollAnimation
                 }
             };
         }
-        else if (this._startValue > this._endValue)
-        {
-            throw new Error("'startValue' option must be less than or equal to 'endValue'.");
-        }
-        else
+        else if (this._startValue <= this._endValue)
         {
             const startValue = this._startValue;
             const endValue = this._endValue;
@@ -111,6 +107,10 @@ export default class ScrollAnimation
                     return ((scrollValue - startValue) / difference);
                 }
             };
+        }
+        else
+        {
+            throw new Error("'startValue' option must be less than or equal to 'endValue'.");
         }
     }
 
@@ -149,13 +149,15 @@ export default class ScrollAnimation
 
     public update(): void
     {
-        // const screenWidth = window.innerWidth;
-        // const screenHeight = window.innerHeight;
+        const windowWidth = window.innerWidth;
+        // const windowHeight = window.innerHeight;
+
         // const horizontalScroll = this._getHorizontalScroll();
         const verticalScroll = this._getVerticalScroll();
+
         const ratio = this._computeRatio(verticalScroll);
 
-        for (const animator of this._animators)
+        for (const animator of this._animators.filter((a: BaseAnimator) => a.canBeApplied(windowWidth)))
         {
             animator.update(ratio);
         }
