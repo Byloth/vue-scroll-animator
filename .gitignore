@@ -1,0 +1,27 @@
+# Files created by OS
+#
+.DS_Store
+Desktop.ini
+
+# Files created by IDE
+#
+/.idea/
+/.vscode/
+
+/*.code-workspace
+
+# Generated & compiled files
+#
+/*.tgz
+
+*.d.ts
+*.js
+*.js.map
+
+# Downloadable & installable modules & components
+#
+/node_modules/
+
+# Not ignored
+#
+!.gitkeep
