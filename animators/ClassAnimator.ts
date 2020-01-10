@@ -26,9 +26,7 @@ export default class ClassAnimator extends BaseAnimator
     };
 
     protected _lastIsActive?: boolean;
-
     protected _classesName: string[];
-    protected _behavior: ClassAnimatorBehavior;
 
     protected _isActive!: (ratioValue: number) => boolean;
 
@@ -39,13 +37,12 @@ export default class ClassAnimator extends BaseAnimator
         super(options);
 
         this._classesName = options.classesName;
-        this._behavior = options.behavior!;
-
-        this._compile(options);
     }
 
     protected _compile(options: ClassAnimatorOptions): void
     {
+        super._compile(options);
+
         if (options.behavior === ClassAnimatorBehavior.FROM_START)
         {
             this._isActive = (ratioValue: number) => (ratioValue > 0);

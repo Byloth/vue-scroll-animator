@@ -27,9 +27,6 @@ export default class CssPropertyAnimator extends BaseAnimator
     protected _name: string;
     protected _unit: string;
 
-    protected _startValue: number;
-    protected _endValue?: number;
-
     protected _computeValue!: (ratioValue: number) => number;
 
     public constructor(options: CssPropertyAnimatorOptions)
@@ -40,36 +37,33 @@ export default class CssPropertyAnimator extends BaseAnimator
 
         this._name = options.name;
         this._unit = options.unit!;
-
-        this._startValue = options.startValue;
-        this._endValue = options.endValue;
-
-        this._compile(options);
     }
 
     protected _compile(options: CssPropertyAnimatorOptions): void
     {
+        super._compile(options);
+
         if (options.computeValue !== undefined)
         {
             this._computeValue = options.computeValue;
         }
-        else if (this._endValue === undefined)
+        else if (options.endValue === undefined)
         {
-            const startValue = this._startValue;
+            const startValue = options.startValue;
 
             this._computeValue = (ratioValue: number): number => (startValue + ratioValue);
         }
-        else if (this._startValue <= this._endValue)
+        else if (options.startValue <= options.endValue)
         {
-            const startValue = this._startValue;
-            const difference = this._endValue - this._startValue;
+            const startValue = options.startValue;
+            const difference = options.endValue - options.startValue;
 
             this._computeValue = (ratioValue: number): number => ((difference * ratioValue) + startValue);
         }
         else
         {
-            const startValue = this._endValue;
-            const difference = this._startValue - this._endValue;
+            const startValue = options.endValue;
+            const difference = options.startValue - options.endValue;
 
             this._computeValue = (ratioValue: number): number => ((difference * (1 - ratioValue)) + startValue);
         }

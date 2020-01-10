@@ -43,6 +43,11 @@ class VueScrollAnimator implements PluginObject<object>
 
     public animate(options: AnimationOptions): ScrollAnimation
     {
+        if (options.target === undefined)
+        {
+            throw new Error("'target' option must be correctly valorized.");
+        }
+
         const animation = new ScrollAnimation(options);
         this._animations.push(animation);
 
