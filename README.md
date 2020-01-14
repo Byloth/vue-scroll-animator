@@ -29,13 +29,13 @@ new Vue({...}).$mount("#app");
 /* plugins.d.ts */
 
 import Vue from "vue";
-import VueAnimation, { AnimationOptions } from "@byloth/vue-scroll-animator/base/ScrollAnimation";
+import ScrollAnimation, { AnimationOptions } from "@byloth/vue-scroll-animator/base/ScrollAnimation";
 
 declare module "vue/types/vue"
 {
     interface Vue
     {
-        $scrollAnimate(options: AnimationOptions): VueAnimation;
+        $scrollAnimate(options: AnimationOptions): ScrollAnimation;
     }
 }
 ```
