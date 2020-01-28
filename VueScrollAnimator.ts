@@ -1,6 +1,6 @@
-/*
- * Based on: https://github.com/janpaepke/ScrollMagic
- */
+//
+// Based on: https://github.com/janpaepke/ScrollMagic
+//
 
 import _Vue, { PluginObject } from "vue";
 
