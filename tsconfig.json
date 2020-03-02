@@ -11,18 +11,10 @@
     "strict": true,
     "baseUrl": ".",
     "outDir": ".",
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    },
     "lib": [
-      "es2019",
+      "esnext",
       "dom"
     ]
   },
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

@@ -1,12 +1,4 @@
-interface BaseAnimatorOptions
-{
-    target?: HTMLElement;
-
-    minWidth?: number;
-    maxWidth?: number;
-}
-
-export { BaseAnimatorOptions };
+import BaseAnimatorOptions from "./options";
 
 export default abstract class BaseAnimator
 {
@@ -87,3 +79,5 @@ export default abstract class BaseAnimator
         }
     }
 }
+
+export { BaseAnimatorOptions };

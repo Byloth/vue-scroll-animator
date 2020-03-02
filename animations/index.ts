@@ -1,22 +1,8 @@
-import BaseAnimator from "../animators/BaseAnimator";
-import ClassAnimator, { ClassAnimatorOptions } from "../animators/ClassAnimator";
-import CssPropertyAnimator, { CssPropertyAnimatorOptions } from "../animators/CssPropertyAnimator";
+import BaseAnimator from "../animators";
+import ClassAnimator from "../animators/classes";
+import CssPropertyAnimator from "../animators/cssProperties";
 
-interface AnimationOptions
-{
-    target?: HTMLElement;
-
-    startValue: number;
-    endValue?: number;
-    // direction?: string; -> vertical / horizontal
-
-    classes?: ClassAnimatorOptions[];
-    cssProperties?: CssPropertyAnimatorOptions[];
-
-    computeRatio?: (scrollValue: number) => number;
-}
-
-export { AnimationOptions };
+import AnimationOptions from "./options";
 
 export default class ScrollAnimation
 {
@@ -163,3 +149,5 @@ export default class ScrollAnimation
         }
     }
 }
+
+export { AnimationOptions };

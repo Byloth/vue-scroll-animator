@@ -1,21 +1,6 @@
-import BaseAnimator, { BaseAnimatorOptions } from "./BaseAnimator";
+import BaseAnimator from "../../animators";
 
-interface CssPropertyAnimatorOptions extends BaseAnimatorOptions
-{
-    name: string;
-    unit?: string;
-
-    startValue: number;
-    endValue?: number;
-
-    // direction?: string; -> normal / inverse
-    // speed?: number; -> 1x / 2x / 0.5x / ...
-    // timing?: string; -> linear / ease / cubic
-
-    computeValue?: (ratioValue: number) => number;
-}
-
-export { CssPropertyAnimatorOptions };
+import CssPropertyAnimatorOptions from "./options";
 
 export default class CssPropertyAnimator extends BaseAnimator
 {
@@ -85,3 +70,5 @@ export default class CssPropertyAnimator extends BaseAnimator
         this._target.style.setProperty(this._name, value);
     }
 }
+
+export { CssPropertyAnimatorOptions };
