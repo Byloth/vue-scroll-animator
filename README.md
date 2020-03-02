@@ -49,7 +49,8 @@ declare module "vue/types/vue"
 ```ts
 /* ExampleVueComponent.ts */
 
-import { ScrollAnimation, ClassAnimatorBehavior } from "@byloth/vue-scroll-animator";
+import ScrollAnimation from "@byloth/vue-scroll-animator/animations";
+import { ClassAnimatorBehavior } from "@byloth/vue-scroll-animator/animators/classes";
 
 @Component({ name: "ExampleVueComponent" })
 export default class ExampleVueComponent extends Vue
