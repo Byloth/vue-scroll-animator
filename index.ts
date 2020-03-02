@@ -4,7 +4,10 @@
 
 import _Vue, { PluginObject } from "vue";
 
-import ScrollAnimation, { AnimationOptions } from "./base/ScrollAnimation";
+import ScrollAnimation, { AnimationOptions } from "./animations";
+
+import ClassAnimator, { ClassAnimatorBehavior } from "./animators/classes";
+import CssPropertyAnimator from "./animators/cssProperties";
 
 class VueScrollAnimator implements PluginObject<object>
 {
@@ -87,3 +90,8 @@ class VueScrollAnimator implements PluginObject<object>
 }
 
 export default new VueScrollAnimator();
+
+export { ScrollAnimation };
+
+export { ClassAnimator, ClassAnimatorBehavior };
+export { CssPropertyAnimator };

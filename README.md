@@ -16,7 +16,7 @@ npm install @byloth/vue-scroll-animator --save
 /* main.ts */
 
 import Vue from "vue";
-import VueScrollAnimator from "@byloth/vue-scroll-animator/VueScrollAnimator";
+import VueScrollAnimator from "@byloth/vue-scroll-animator";
 
 Vue.use(VueScrollAnimator);
 
@@ -29,7 +29,7 @@ new Vue({...}).$mount("#app");
 /* plugins.d.ts */
 
 import Vue from "vue";
-import ScrollAnimation, { AnimationOptions } from "@byloth/vue-scroll-animator/base/ScrollAnimation";
+import ScrollAnimation, { AnimationOptions } from "@byloth/vue-scroll-animator/animations";
 
 declare module "vue/types/vue"
 {
@@ -47,10 +47,9 @@ declare module "vue/types/vue"
 ```ts
 /* ExampleVueComponent.ts */
 
-import ScrollAnimation from "@byloth/vue-scroll-animator/base/ScrollAnimation";
-import { ClassAnimatorBehavior } from "@byloth/vue-scroll-animator/animators/ClassAnimator";
+import { ScrollAnimation, ClassAnimatorBehavior } from "@byloth/vue-scroll-animator";
 
-@Component
+@Component({ name: "ExampleVueComponent" })
 export default class ExampleVueComponent extends Vue
 {
     protected _animation!: ScrollAnimation;

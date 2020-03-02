@@ -1,6 +1,6 @@
 {
   "name": "@byloth/vue-scroll-animator",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A simply but fast & powerful library to animate HTML elements while scrolling pages.",
   "keywords": [
     "Vue.js",
@@ -24,8 +24,8 @@
     "type": "git",
     "url": "git+https://github.com/Byloth/vue-scroll-animator.git"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "tsc",
     "lint": "tslint -c tslint.json --project .",
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "tslib": "^1.10.0",
-    "tslint": "^5.20.1",
+    "tslint": "^6.0.0",
     "typescript": "^3.7.4"
   }
 }
