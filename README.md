@@ -2,7 +2,7 @@
 
 ![Publish NPM packages](https://github.com/Byloth/vue-scroll-animator/workflows/Publish%20NPM%20packages/badge.svg)
 
-### A simply but fast & powerful library to animate HTML elements while scrolling pages. ###
+### A simple but fast & powerful library to animate HTML elements while scrolling pages. ###
 
 ---
 
