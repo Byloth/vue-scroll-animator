@@ -53,7 +53,7 @@ export default class ClassAnimator extends BaseAnimator
         }
         else
         {
-            throw new Error("Invalid value for 'behavior' option.");
+            throw new Error(`Invalid value "${options.behavior}" for 'behavior' option.`);
         }
     }
 

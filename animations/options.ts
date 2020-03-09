@@ -5,8 +5,9 @@ export default interface AnimationOptions
 {
     target?: HTMLElement;
 
-    startValue: number;
-    endValue?: number;
+    startingValue: number;
+    maxDifference?: number;
+    endingValue?: number;
     // direction?: string; -> vertical / horizontal
 
     classes?: ClassAnimatorOptions[];

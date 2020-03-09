@@ -63,7 +63,7 @@ class VueScrollAnimator implements PluginObject<object>
 
         Vue.prototype.$scrollAnimate = function(options: AnimationOptions): ScrollAnimation
         {
-            return self.animate.call(self, {target: this.$el, ...options});
+            return self.animate.call(self, { target: this.$el, ...options });
         };
     }
 
