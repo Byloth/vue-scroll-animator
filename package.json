@@ -1,6 +1,6 @@
 {
   "name": "@byloth/vue-scroll-animator",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A simply but fast & powerful library to animate HTML elements while scrolling pages.",
   "keywords": [
     "Vue.js",
