@@ -24,7 +24,7 @@ Vue.use(VueScrollAnimator);
 
 // [...]
 
-new Vue({...}).$mount("#app");
+new Vue({ ... }).$mount("#app");
 ```
 
 ```ts
@@ -37,7 +37,8 @@ declare module "vue/types/vue"
 {
     interface Vue
     {
-        $scrollAnimate(options: AnimationOptions): ScrollAnimation;
+        $initScrollAnimation(options: AnimationOptions): ScrollAnimation;
+        $destroyScrollAnimation(animation: ScrollAnimation): void;
     }
 }
 ```
@@ -55,13 +56,13 @@ import { ClassAnimatorBehavior } from "@byloth/vue-scroll-animator/animators/cla
 @Component({ name: "ExampleVueComponent" })
 export default class ExampleVueComponent extends Vue
 {
-    protected _animation!: ScrollAnimation;
+    protected _animation?: ScrollAnimation;
 
     // [...]
 
     public mounted(): void
     {
-        this._animation = this.$scrollAnimate({
+        this._animation = this.$initScrollAnimation({
 
             startValue: 0,
             endValue: 128,
@@ -91,6 +92,12 @@ export default class ExampleVueComponent extends Vue
                 }
             ]
         });
+    }
+    public destroyed(): void
+    {
+        this.$destroyScrollAnimation(this._animation!);
+
+        this._animation = undefined;
     }
 
     // [...]
