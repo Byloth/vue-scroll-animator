@@ -8,7 +8,7 @@ export default class ScrollAnimation
 {
     public static readonly DEFAULT_OPTIONS = {
         classes: [],
-        properties: []
+        cssProperties: []
     };
 
     public static Normalize(value: number)

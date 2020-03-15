@@ -53,6 +53,12 @@ class VueScrollAnimator implements PluginObject<object>
 
         return animation;
     }
+    public deanimate(animation: ScrollAnimation): void
+    {
+        this._animations = this._animations.filter((item) => item !== animation);
+
+        animation.disable();
+    }
 
     // tslint:disable-next-line:variable-name
     public install(Vue: typeof _Vue, configuration?: object): void
@@ -63,7 +69,22 @@ class VueScrollAnimator implements PluginObject<object>
 
         Vue.prototype.$scrollAnimate = function(options: AnimationOptions): ScrollAnimation
         {
+            // tslint:disable-next-line: no-console
+            console.warn('"$scrollAnimate" method has been deprecated.' +
+                         ' Please, update your code using "$initScrollAnimation"');
+
             return self.animate.call(self, { target: this.$el, ...options });
+        };
+
+        Vue.prototype.$initScrollAnimation = function(options: AnimationOptions): ScrollAnimation
+        {
+            return self.animate.call(self, { target: this.$el, ...options });
+        };
+
+        // tslint:disable-next-line: only-arrow-functions
+        Vue.prototype.$destroyScrollAnimation = function(animation: ScrollAnimation): void
+        {
+            self.deanimate.call(self, animation);
         };
     }
 
