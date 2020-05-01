@@ -19,8 +19,8 @@ class VueScrollAnimator implements PluginObject<object>
         this._animations = [];
     }
 
-    protected _requestCallback = (timestamp: number): void => {
-
+    protected _requestCallback = (timestamp: number): void =>
+    {
         if (this._isUpdating === true)
         {
             for (const animation of this._animations.filter((a: ScrollAnimation) => a.isEnabled))
@@ -32,8 +32,8 @@ class VueScrollAnimator implements PluginObject<object>
         }
     }
 
-    protected _eventListener = (evt: Event): void => {
-
+    protected _eventListener = (evt: Event): void =>
+    {
         if (this._isUpdating === false)
         {
             this._isUpdating = true;
@@ -90,8 +90,8 @@ class VueScrollAnimator implements PluginObject<object>
 
     public init(): void
     {
-        window.addEventListener("resize", this._eventListener);
-        window.addEventListener("scroll", this._eventListener);
+        window.addEventListener("resize", this._eventListener, { passive: true });
+        window.addEventListener("scroll", this._eventListener, { passive: true });
     }
     public destroy(): void
     {
