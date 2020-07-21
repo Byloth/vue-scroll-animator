@@ -46,6 +46,8 @@ export default class ScrollAnimation
 
         this._init(options);
         this._compile(options);
+
+        this.update();
     }
 
     protected _init(options: AnimationOptions): void
