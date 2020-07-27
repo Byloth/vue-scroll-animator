@@ -1,8 +1,26 @@
+# Files created by OS
+#
+.DS_Store
+Desktop.ini
+
+# Files created by IDE
+#
+/.idea/
+/.vscode/
+
+/*.code-workspace
+
+# Generated & compiled files
+#
+/*.tgz
+
+# Files with sensitive data
+#
 /.github/
 
+# Config files
+#
 /.editorconfig
 /.eslintrc.js
-
-/*.tgz
 
 /tsconfig.json
