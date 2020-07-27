@@ -28,6 +28,7 @@
   "types": "index.d.ts",
   "scripts": {
     "build": "tsc",
+    "ci": "yarn install --frozen-lockfile",
     "lint": "eslint .",
     "test": "echo \"Sorry! No test specified yet. 😭\" && exit 1"
   },
