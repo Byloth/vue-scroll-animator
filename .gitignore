@@ -25,3 +25,7 @@ Desktop.ini
 # Not ignored
 #
 !.gitkeep
+
+# Config files
+#
+!.eslintrc.js
