@@ -6,7 +6,7 @@ import _Vue, { PluginObject } from "vue";
 
 import ScrollAnimation, { AnimationOptions } from "./animations";
 
-class VueScrollAnimator implements PluginObject<object>
+class VueScrollAnimator implements PluginObject<unknown>
 {
     protected _isUpdating: boolean;
     protected _requestId?: number;
@@ -30,7 +30,7 @@ class VueScrollAnimator implements PluginObject<object>
 
             this._isUpdating = false;
         }
-    }
+    };
 
     protected _eventListener = (evt: Event): void =>
     {
@@ -39,7 +39,7 @@ class VueScrollAnimator implements PluginObject<object>
             this._isUpdating = true;
             this._requestId = window.requestAnimationFrame(this._requestCallback);
         }
-    }
+    };
 
     public animate(options: AnimationOptions): ScrollAnimation
     {
@@ -60,16 +60,16 @@ class VueScrollAnimator implements PluginObject<object>
         animation.disable();
     }
 
-    // tslint:disable-next-line:variable-name
-    public install(Vue: typeof _Vue, configuration?: object): void
+    public install(Vue: typeof _Vue, configuration?: unknown): void
     {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const self = this;
 
         this.init();
 
         Vue.prototype.$scrollAnimate = function(options: AnimationOptions): ScrollAnimation
         {
-            // tslint:disable-next-line: no-console
+            // eslint-disable-next-line no-console
             console.warn('"$scrollAnimate" method has been deprecated.' +
                          ' Please, update your code using "$initScrollAnimation"');
 
@@ -81,7 +81,6 @@ class VueScrollAnimator implements PluginObject<object>
             return self.animate.call(self, { target: this.$el, ...options });
         };
 
-        // tslint:disable-next-line: only-arrow-functions
         Vue.prototype.$destroyScrollAnimation = function(animation: ScrollAnimation): void
         {
             self.deanimate.call(self, animation);

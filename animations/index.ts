@@ -11,7 +11,7 @@ export default class ScrollAnimation
         cssProperties: []
     };
 
-    public static Normalize(value: number)
+    public static Normalize(value: number): number
     {
         if (value <= 0)
         {
