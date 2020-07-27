@@ -14,6 +14,6 @@ export default interface ClassAnimatorOptions extends BaseAnimatorOptions
 {
     classesName: string[];
     behavior?: ClassAnimatorBehavior;
-}
+};
 
 export { ClassAnimatorBehavior };

@@ -1,8 +1,8 @@
 /.github/
 
 /.editorconfig
+/.eslintrc.js
 
 /*.tgz
 
 /tsconfig.json
-/tslint.json
