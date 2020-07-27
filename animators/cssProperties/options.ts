@@ -13,4 +13,4 @@ export default interface CssPropertyAnimatorOptions extends BaseAnimatorOptions
     // timing?: string; -> linear / ease / cubic
 
     computeValue?: (ratioValue: number) => number;
-}
+};

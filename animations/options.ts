@@ -14,4 +14,4 @@ export default interface AnimationOptions
     cssProperties?: CssPropertyAnimatorOptions[];
 
     computeRatio?: (scrollValue: number) => number;
-}
+};

@@ -11,7 +11,7 @@ export default class ScrollAnimation
         cssProperties: []
     };
 
-    public static Normalize(value: number)
+    public static Normalize(value: number): number
     {
         if (value <= 0)
         {
@@ -46,6 +46,8 @@ export default class ScrollAnimation
 
         this._init(options);
         this._compile(options);
+
+        this.update();
     }
 
     protected _init(options: AnimationOptions): void

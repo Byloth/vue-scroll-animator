@@ -1,6 +1,6 @@
 {
   "name": "@byloth/vue-scroll-animator",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "A simple but fast & powerful library to animate HTML elements while scrolling pages.",
   "keywords": [
     "Vue.js",
@@ -28,15 +28,22 @@
   "types": "index.d.ts",
   "scripts": {
     "build": "tsc",
-    "lint": "tslint -c tslint.json --project .",
+    "ci": "yarn install --frozen-lockfile",
+    "lint": "eslint .",
     "test": "echo \"Sorry! No test specified yet. 😭\" && exit 1"
   },
   "dependencies": {
+    "tslib": "^2.0.0",
     "vue": "^2.6.11"
   },
   "devDependencies": {
-    "tslib": "^1.13.0",
-    "tslint": "^6.1.2",
-    "typescript": "^3.9.5"
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "@typescript-eslint/parser": "^3.7.0",
+    "eslint": "^7.5.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "typescript": "^3.9.7"
   }
 }
