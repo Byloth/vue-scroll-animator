@@ -23,6 +23,7 @@ module.exports = {
     "no-unused-vars": [DYNAMIC_LEVEL, { args: "none" }],
     "quote-props": ["error", "consistent"],
     "quotes": ["error", "double", { allowTemplateLiterals: true, avoidEscape: true }],
+    "semi": ["error", "always"],
     "space-before-function-paren": ["error", { anonymous: "never", named: "never", asyncArrow: "always" }],
 
     "@typescript-eslint/no-extra-semi": "off",
@@ -32,16 +33,16 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["*.js"],
-      rules: { "semi": ["error", "always"] }
-    },
-    {
       files: [".eslintrc.js", "*.config.js"],
       rules: {
         "indent": ["error", 2],
 
         "@typescript-eslint/no-var-requires": "off"
       }
+    },
+    {
+      files: ["*.ts"],
+      rules: { semi: "off" }
     }
   ]
 };
