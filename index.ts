@@ -89,8 +89,8 @@ class VueScrollAnimator implements PluginObject<unknown>
 
     public init(): void
     {
-        window.addEventListener("resize", this._eventListener, { passive: true });
-        window.addEventListener("scroll", this._eventListener, { passive: true });
+        window.addEventListener("resize", this._eventListener, { capture: true, passive: true });
+        window.addEventListener("scroll", this._eventListener, { capture: true, passive: true });
     }
     public destroy(): void
     {
