@@ -1,4 +1,4 @@
-import BaseAnimator from "@/animators";
+import BaseAnimator from "../../animators";
 
 import _ClassAnimatorOptions, { ClassAnimatorBehavior } from "./options";
 

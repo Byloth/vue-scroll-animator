@@ -27,9 +27,9 @@
   "types": "types/index.d.ts",
   "scripts": {
     "build": "yarn build:module && yarn build:types && yarn build:main",
-    "build:main": "rm -r dist/* && webpack --mode production",
-    "build:module": "rm -r build/* && tsc --outDir build/ --declaration false",
-    "build:types": "rm -r types/* && tsc --outDir types/ --emitDeclarationOnly",
+    "build:main": "rm -rf dist/* && webpack --mode production",
+    "build:module": "rm -rf build/* && tsc --outDir build/ --declaration false",
+    "build:types": "rm -rf types/* && tsc --outDir types/ --emitDeclarationOnly",
     "ci": "yarn install --frozen-lockfile",
     "lint": "eslint .",
     "test": "echo \"Sorry! No test specified yet. 😭\" && exit 1"

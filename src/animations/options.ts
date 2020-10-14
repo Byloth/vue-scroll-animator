@@ -1,5 +1,5 @@
-import { ClassAnimatorOptions } from "@/animators/classes";
-import { CssPropertyAnimatorOptions } from "@/animators/cssProperties";
+import { ClassAnimatorOptions } from "../animators/classes";
+import { CssPropertyAnimatorOptions } from "../animators/cssProperties";
 
 export default interface AnimationOptions
 {

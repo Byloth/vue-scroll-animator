@@ -1,6 +1,6 @@
-import BaseAnimator from "@/animators";
-import ClassAnimator from "@/animators/classes";
-import CssPropertyAnimator from "@/animators/cssProperties";
+import BaseAnimator from "../animators";
+import ClassAnimator from "../animators/classes";
+import CssPropertyAnimator from "../animators/cssProperties";
 
 import AnimationOptions from "./options";
 
