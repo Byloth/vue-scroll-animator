@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "esnext",
     "noImplicitAny": true,
     "removeComments": true,
     "declaration": true,
@@ -11,7 +11,6 @@
     "sourceMap": true,
     "strict": true,
     "baseUrl": ".",
-    "paths": { "@/*": ["src/*"] },
     "lib": [
       "esnext",
       "dom"
@@ -20,6 +19,7 @@
   "exclude": [
     "build",
     "dist",
-    "node_modules"
+    "node_modules",
+    "types"
   ]
 }

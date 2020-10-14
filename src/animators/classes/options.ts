@@ -1,4 +1,4 @@
-import { BaseAnimatorOptions } from "@/animators";
+import { BaseAnimatorOptions } from "../../animators";
 
 enum ClassAnimatorBehavior
 {
