@@ -20,7 +20,9 @@ Desktop.ini
 
 # Config files
 #
+/.babelrc
 /.editorconfig
 /.eslintrc.js
 
 /tsconfig.json
+/webpack.config.js
