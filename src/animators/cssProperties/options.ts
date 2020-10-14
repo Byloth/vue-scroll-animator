@@ -1,4 +1,4 @@
-import { BaseAnimatorOptions } from "../../animators";
+import { BaseAnimatorOptions } from "@/animators";
 
 export default interface CssPropertyAnimatorOptions extends BaseAnimatorOptions
 {
@@ -13,4 +13,4 @@ export default interface CssPropertyAnimatorOptions extends BaseAnimatorOptions
     // timing?: string; -> linear / ease / cubic
 
     computeValue?: (ratioValue: number) => number;
-};
+}

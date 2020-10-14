@@ -4,4 +4,4 @@ export default interface BaseAnimatorOptions
 
     minWidth?: number;
     maxWidth?: number;
-};
+}

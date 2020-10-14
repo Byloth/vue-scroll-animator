@@ -4,7 +4,7 @@
 
 import _Vue, { PluginObject } from "vue";
 
-import ScrollAnimation, { AnimationOptions } from "./animations";
+import ScrollAnimation, { AnimationOptions } from "@/animations";
 
 class VueScrollAnimator implements PluginObject<unknown>
 {

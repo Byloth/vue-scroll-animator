@@ -1,4 +1,4 @@
-import { BaseAnimatorOptions } from "../../animators";
+import { BaseAnimatorOptions } from "@/animators";
 
 enum ClassAnimatorBehavior
 {
@@ -14,6 +14,6 @@ export default interface ClassAnimatorOptions extends BaseAnimatorOptions
 {
     classesName: string[];
     behavior?: ClassAnimatorBehavior;
-};
+}
 
 export { ClassAnimatorBehavior };
