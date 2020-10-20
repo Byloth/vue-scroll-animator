@@ -12,7 +12,7 @@ export default class CssPropertyAnimator extends BaseAnimator
     protected _name: string;
     protected _unit: string;
 
-    protected _computeValue!: (ratioValue: number) => number;
+    protected _computeValue: (ratioValue: number) => number;
 
     public constructor(options: CssPropertyAnimatorOptions)
     {
@@ -22,11 +22,6 @@ export default class CssPropertyAnimator extends BaseAnimator
 
         this._name = options.name;
         this._unit = options.unit!;
-    }
-
-    protected _compile(options: CssPropertyAnimatorOptions): void
-    {
-        super._compile(options);
 
         if (options.computeValue !== undefined)
         {

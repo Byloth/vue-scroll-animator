@@ -7,17 +7,12 @@ export default abstract class BaseAnimator
 
     protected _target: HTMLElement;
 
-    protected _canBeApplied!: (windowWidth: number) => boolean;
+    protected _canBeApplied: (windowWidth: number) => boolean;
 
     public constructor(options: BaseAnimatorOptions)
     {
         this._target = options.target!;
 
-        this._compile(options);
-    }
-
-    protected _compile(options: BaseAnimatorOptions): void
-    {
         if (options.minWidth !== undefined)
         {
             const minWidth = options.minWidth;
