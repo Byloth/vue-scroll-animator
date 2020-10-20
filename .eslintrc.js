@@ -6,6 +6,7 @@ module.exports = {
     browser: true,
     node: true
   },
+
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -21,6 +22,9 @@ module.exports = {
     "newline-per-chained-call": ["error", { ignoreChainWithDepth: 2 }],
     "no-console": DYNAMIC_LEVEL,
     "no-debugger": DYNAMIC_LEVEL,
+    "no-multi-spaces": ["error", { exceptions: { "Property": false } }],
+    "no-multiple-empty-lines": ["error", { max: 1 }],
+    "no-trailing-spaces": "error",
     "no-unused-vars": [DYNAMIC_LEVEL, { args: "none" }],
     "object-shorthand": ["error", "consistent"],
     "quote-props": ["error", "consistent"],
@@ -39,6 +43,14 @@ module.exports = {
         "indent": ["error", 2, { SwitchCase: 1 }],
 
         "@typescript-eslint/no-var-requires": "off"
+      }
+    },
+    {
+      files: ["*.json"],
+      rules: {
+        "indent": ["error", 2],
+        "semi": ["error", "never"],
+        "@typescript-eslint/semi": ["error", "never"]
       }
     },
     {
