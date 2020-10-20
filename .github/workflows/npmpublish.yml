@@ -9,45 +9,67 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 14
+
       - run: npm install -g yarn
       - run: yarn ci
       - run: yarn lint
-      - run: yarn build
       # - run: yarn test
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14
-          registry-url: https://registry.npmjs.org/
-      - run: npm install -g yarn
-      - run: yarn ci
       - run: yarn build
-      - run: yarn publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: yarn pack
+      - shell: bash
+        run: |
+          PACKAGE_VERSION=`node -e "console.log(require('./package.json').version);"`
+          PACKAGE_NAME="byloth-vue-scroll-animator-v${PACKAGE_VERSION}.tgz"
+          tar -xzvf "${PACKAGE_NAME}" -C "."
 
-  publish-gpr:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/upload-artifact@v2
         with:
-          node-version: 14
-          registry-url: https://npm.pkg.github.com/
-          scope: '@byloth'
-      - run: npm install -g yarn
-      - run: yarn ci
-      - run: yarn build
-      - run: yarn publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: byloth-vue-scroll-animator
+          path: package
+
+  #
+  # test-artifact:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - [...]
+  #
+
+  # publish-npm:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: homework
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 14
+  #         registry-url: https://registry.npmjs.org/
+  #     - run: npm install -g yarn
+  #     - run: yarn ci
+  #     - run: yarn build
+  #     - run: yarn publish
+  #       env:
+  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  # publish-gpr:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 14
+  #         registry-url: https://npm.pkg.github.com/
+  #         scope: '@byloth'
+  #     - run: npm install -g yarn
+  #     - run: yarn ci
+  #     - run: yarn build
+  #     - run: yarn publish
+  #       env:
+  #         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
