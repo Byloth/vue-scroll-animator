@@ -10,7 +10,9 @@ module.exports = {
   output: {
     path: PATH.resolve(__dirname, "dist/"),
     filename: "[name].js",
-    libraryTarget: "umd"
+    library: "VueScrollAnimator",
+    libraryExport: "default",
+    libraryTarget: "assign"
   },
   resolve: {
     extensions: [".js", ".ts"],
