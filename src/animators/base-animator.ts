@@ -13,7 +13,7 @@ export default abstract class BaseAnimator
 
     protected _target: HTMLElement;
 
-    protected _canBeApplied: (windowWidth: number) => boolean;
+    protected _canBeApplied: () => boolean;
 
     public constructor(options: BaseAnimatorOptions)
     {
@@ -25,18 +25,22 @@ export default abstract class BaseAnimator
 
             if (options.maxWidth === undefined)
             {
-                this._canBeApplied = (windowWidth: number): boolean => (minWidth <= windowWidth);
+                this._canBeApplied = (): boolean => (minWidth <= window.innerWidth);
             }
             else if (minWidth < options.maxWidth)
             {
                 const maxWidth = options.maxWidth;
 
-                this._canBeApplied = (windowWidth: number): boolean =>
-                    ((minWidth <= windowWidth) && (windowWidth <= maxWidth));
+                this._canBeApplied = (): boolean =>
+                {
+                    const windowWidth = window.innerWidth;
+
+                    return ((minWidth <= windowWidth) && (windowWidth <= maxWidth));
+                };
             }
             else if (minWidth === options.maxWidth)
             {
-                this._canBeApplied = (windowWidth: number): boolean => (minWidth === windowWidth);
+                this._canBeApplied = (): boolean => (minWidth === window.innerWidth);
             }
             else
             {
@@ -47,19 +51,19 @@ export default abstract class BaseAnimator
         {
             const maxWidth = options.maxWidth;
 
-            this._canBeApplied = (windowWidth: number): boolean => (windowWidth <= maxWidth);
+            this._canBeApplied = (): boolean => (window.innerWidth <= maxWidth);
         }
         else
         {
-            this._canBeApplied = (windowWidth: number): boolean => (true);
+            this._canBeApplied = (): boolean => true;
         }
     }
 
     protected abstract _update(ratioValue: number): void;
 
-    public canBeApplied(windowWidth: number): boolean
+    public canBeApplied(): boolean
     {
-        const canBeApplied = this._canBeApplied(windowWidth);
+        const canBeApplied = this._canBeApplied();
 
         if (canBeApplied !== this._lastCanBeApplied)
         {

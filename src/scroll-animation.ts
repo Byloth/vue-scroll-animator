@@ -1,6 +1,8 @@
 import { BaseAnimator, ClassAnimator, CssPropertyAnimator } from "./animators";
 import { ClassAnimatorOptions, CssPropertyAnimatorOptions } from "./animators";
 
+export type Orientation = "horizontal" | "vertical";
+
 export interface AnimationOptions
 {
     target?: HTMLElement;
@@ -8,7 +10,7 @@ export interface AnimationOptions
     startingValue: number;
     maxDifference?: number;
     endingValue?: number;
-    // direction?: string; -> vertical / horizontal
+    orientation?: Orientation;
 
     classes?: ClassAnimatorOptions[];
     cssProperties?: CssPropertyAnimatorOptions[];
@@ -19,6 +21,8 @@ export interface AnimationOptions
 export default class ScrollAnimation
 {
     public static readonly DEFAULT_OPTIONS = {
+        orientation: "vertical" as Orientation,
+
         classes: [],
         cssProperties: []
     };
@@ -40,53 +44,43 @@ export default class ScrollAnimation
     }
 
     protected _enabled: boolean;
-    protected _animators!: BaseAnimator[];
+    protected _animators: BaseAnimator[];
 
     protected _lastRatio: number;
-    protected _lastVerticalScroll: number;
+    protected _lastScrollValue: number;
 
-    protected _computeRatio!: (scrollValue: number) => number;
+    protected _computeRatio: (scrollValue: number) => number;
+    protected _getScrollValue: (element?: Element) => number;
 
     public constructor(options: AnimationOptions)
     {
-        options = { ...ScrollAnimation.DEFAULT_OPTIONS, ...options };
+        const _options = { ...ScrollAnimation.DEFAULT_OPTIONS, ...options };
 
         this._enabled = true;
-
-        this._lastRatio = 0;
-        this._lastVerticalScroll = 0;
-
-        this._init(options);
-        this._compile(options);
-
-        this.update();
-    }
-
-    protected _init(options: AnimationOptions): void
-    {
         this._animators = [];
 
-        for (const classOptions of options.classes!)
+        this._lastRatio = 0;
+        this._lastScrollValue = 0;
+
+        for (const classOptions of _options.classes!)
         {
-            this._animators.push(new ClassAnimator({ target: options.target, ...classOptions }));
+            this._animators.push(new ClassAnimator({ target: _options.target, ...classOptions }));
         }
 
-        for (const cssPropertyOptions of options.cssProperties!)
+        for (const cssPropertyOptions of _options.cssProperties!)
         {
-            this._animators.push(new CssPropertyAnimator({ target: options.target, ...cssPropertyOptions }));
+            this._animators.push(new CssPropertyAnimator({ target: _options.target, ...cssPropertyOptions }));
         }
-    }
-    protected _compile(options: AnimationOptions): void
-    {
-        if (options.computeRatio !== undefined)
-        {
-            this._computeRatio = options.computeRatio;
-        }
-        else if (options.endingValue === undefined)
-        {
-            const startValue = options.startingValue;
 
-            if (options.maxDifference === undefined)
+        if (_options.computeRatio !== undefined)
+        {
+            this._computeRatio = _options.computeRatio;
+        }
+        else if (_options.endingValue === undefined)
+        {
+            const startValue = _options.startingValue;
+
+            if (_options.maxDifference === undefined)
             {
                 this._computeRatio = (scrollValue: number): number =>
                 {
@@ -102,7 +96,7 @@ export default class ScrollAnimation
             }
             else
             {
-                const maxDifference = Math.abs(options.maxDifference);
+                const maxDifference = Math.abs(_options.maxDifference);
 
                 this._computeRatio = (scrollValue: number): number =>
                 {
@@ -112,7 +106,7 @@ export default class ScrollAnimation
                     }
                     else
                     {
-                        const difference = scrollValue - this._lastVerticalScroll;
+                        const difference = scrollValue - this._lastScrollValue;
                         const partialRatio = difference / maxDifference;
 
                         return ScrollAnimation.Normalize(partialRatio + this._lastRatio);
@@ -121,14 +115,14 @@ export default class ScrollAnimation
             }
 
         }
-        else if (options.startingValue <= options.endingValue)
+        else if (_options.startingValue <= _options.endingValue)
         {
-            const startValue = options.startingValue;
-            const endValue = options.endingValue;
+            const startValue = _options.startingValue;
+            const endValue = _options.endingValue;
 
-            if (options.maxDifference === undefined)
+            if (_options.maxDifference === undefined)
             {
-                const difference = options.endingValue - options.startingValue;
+                const difference = _options.endingValue - _options.startingValue;
 
                 this._computeRatio = (scrollValue: number): number =>
                 {
@@ -148,7 +142,7 @@ export default class ScrollAnimation
             }
             else
             {
-                const maxDifference = Math.abs(options.maxDifference);
+                const maxDifference = Math.abs(_options.maxDifference);
 
                 this._computeRatio = (scrollValue: number): number =>
                 {
@@ -162,7 +156,7 @@ export default class ScrollAnimation
                     }
                     else
                     {
-                        const difference = scrollValue - this._lastVerticalScroll;
+                        const difference = scrollValue - this._lastScrollValue;
                         const partialRatio = difference / maxDifference;
 
                         return ScrollAnimation.Normalize(partialRatio + this._lastRatio);
@@ -174,25 +168,31 @@ export default class ScrollAnimation
         {
             throw new Error("'startValue' option must be less than or equal to 'endValue'.");
         }
-    }
 
-    protected _getHorizontalScroll(element?: Element): number
-    {
-        // if (element !== undefined)
-        // {
-        //     return element.scrollLeft;
-        // }
+        if (_options.orientation === "horizontal")
+        {
+            // if (element !== undefined)
+            // {
+            //     return element.scrollLeft;
+            // }
 
-        return window.pageXOffset;
-    }
-    protected _getVerticalScroll(element?: Element): number
-    {
-        // if (element !== undefined)
-        // {
-        //     return element.scrollTop;
-        // }
+            this._getScrollValue = (): number => window.pageXOffset;
+        }
+        else if (_options.orientation === "vertical")
+        {
+            // if (element !== undefined)
+            // {
+            //     return element.scrollTop;
+            // }
 
-        return window.pageYOffset;
+            this._getScrollValue = (): number => window.pageYOffset;
+        }
+        else
+        {
+            throw new Error("'orientation' option value must be equal to \"horizontal\" or \"vertical\".");
+        }
+
+        this.update();
     }
 
     public get isEnabled(): boolean
@@ -211,20 +211,15 @@ export default class ScrollAnimation
 
     public update(): void
     {
-        const windowWidth = window.innerWidth;
-        // const windowHeight = window.innerHeight;
+        const scrollValue = this._getScrollValue();
+        const ratio = this._computeRatio(scrollValue);
 
-        // const horizontalScroll = this._getHorizontalScroll();
-        const verticalScroll = this._getVerticalScroll();
-
-        const ratio = this._computeRatio(verticalScroll);
-
-        for (const animator of this._animators.filter((a: BaseAnimator) => a.canBeApplied(windowWidth)))
+        for (const animator of this._animators.filter((a: BaseAnimator) => a.canBeApplied()))
         {
             animator.update(ratio);
         }
 
         this._lastRatio = ratio;
-        this._lastVerticalScroll = verticalScroll;
+        this._lastScrollValue = scrollValue;
     }
 }
