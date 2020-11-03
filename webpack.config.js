@@ -1,6 +1,18 @@
+const PACKAGE = require("./package.json");
+
 const PATH = require("path");
+const WEBPACK = require("webpack");
 
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+
+const BANNER = `
+/*!
+ * Vue Scroll Animator v${PACKAGE.version} (https://byloth.github.io/vue-scroll-animator)
+ *
+ *  -> Copyright © 2019 - 2020, Matteo Bilotta
+ *  -> Licensed under GNU v3 (https://github.com/Byloth/vue-scroll-animator/blob/master/LICENSE)
+ */
+`;
 
 module.exports = {
   entry: {
@@ -31,5 +43,11 @@ module.exports = {
         loader: "babel-loader"
       }
     ]
-  }
+  },
+  plugins: [
+    new WEBPACK.BannerPlugin({
+      banner: BANNER,
+      raw: true
+    })
+  ]
 };

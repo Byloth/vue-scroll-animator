@@ -38,7 +38,8 @@
     "clean:types": "rm -rf types/*",
     "ci": "yarn install --frozen-lockfile",
     "lint": "eslint .",
-    "test": "echo \"Sorry! No test specified yet. 😭\" && exit 1"
+    "test": "echo \"Sorry! No test specified yet. 😭\" && exit 1",
+    "watch": "yarn build:main --watch"
   },
   "dependencies": {
     "tslib": "^2.0.3",

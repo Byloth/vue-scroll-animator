@@ -13,7 +13,6 @@ Desktop.ini
 # Generated & compiled files
 #
 /build/
-/dist/
 /types/
 /*.tgz
 
