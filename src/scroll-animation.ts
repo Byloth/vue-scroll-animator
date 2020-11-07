@@ -189,7 +189,7 @@ export default class ScrollAnimation
         }
         else
         {
-            throw new Error("'orientation' option value must be equal to \"horizontal\" or \"vertical\".");
+            throw new Error(`'orientation' option value must be equal to "horizontal" or "vertical".`);
         }
 
         this.update();
