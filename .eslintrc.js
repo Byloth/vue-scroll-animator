@@ -60,5 +60,10 @@ module.exports = {
         "semi": "off"
       }
     }
+  ],
+  ignorePatterns: [
+    "build/*",
+    "dist/*",
+    "types/*"
   ]
 };

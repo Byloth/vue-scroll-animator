@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-console */
+
 //
 // Based on: https://github.com/janpaepke/ScrollMagic
 //
@@ -14,13 +17,39 @@ export default class VueScrollAnimator
 
         self.init();
 
+        Vue.mixin({
+            data: (): { _scrollAnimations: ScrollAnimation[] } => ({ _scrollAnimations: [] }),
+
+            destroyed: function(): void
+            {
+                this._scrollAnimations = [];
+            }
+        });
+
         Vue.prototype.$initScrollAnimation = function(options: AnimationOptions): ScrollAnimation
         {
-            return self.animate.call(self, { target: this.$el, ...options });
-        };
+            const animation = self.animate.call(self, { target: this.$el, ...options });
 
+            this._scrollAnimations.push(animation);
+
+            return animation;
+        };
         Vue.prototype.$destroyScrollAnimation = function(animation: ScrollAnimation): void
         {
+            const remove = (animations: ScrollAnimation[], animation: ScrollAnimation) =>
+            {
+                const index = animations.indexOf(animation);
+
+                if (index !== -1)
+                {
+                    animations.splice(index, 1);
+                }
+                else
+                {
+                    throw new Error(`The animation object "${animation}" doesn't exists in the animations array.`);
+                }
+            };
+
             self.deanimate.call(self, animation);
         };
     }
@@ -36,25 +65,23 @@ export default class VueScrollAnimator
         this._animations = [];
     }
 
-    protected _requestCallback = (timestamp: number): void =>
-    {
-        if (this._isUpdating === true)
-        {
-            for (const animation of this._animations.filter((a: ScrollAnimation) => a.isEnabled))
-            {
-                animation.update();
-            }
-
-            this._isUpdating = false;
-        }
-    };
-
     protected _eventListener = (evt: Event): void =>
     {
         if (this._isUpdating === false)
         {
             this._isUpdating = true;
-            this._requestId = window.requestAnimationFrame(this._requestCallback);
+            this._requestId = window.requestAnimationFrame((timestamp: number) =>
+            {
+                if (this._isUpdating === true)
+                {
+                    for (const animation of this._animations.filter((a: ScrollAnimation) => a.isEnabled))
+                    {
+                        animation.update();
+                    }
+
+                    this._isUpdating = false;
+                }
+            });
         }
     };
 
