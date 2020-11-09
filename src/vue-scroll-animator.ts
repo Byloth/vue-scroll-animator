@@ -22,7 +22,7 @@ export default class VueScrollAnimator
 
             destroyed: function(): void
             {
-                this._scrollAnimations = [];
+                (this as Vue)._scrollAnimations = [];
             }
         });
 
