@@ -12,9 +12,4 @@ declare module "vue/types/vue"
     {
         _scrollAnimations: ScrollAnimation[];
     }
-    interface VueConstructor
-    {
-        _scrollAnimations: ScrollAnimation[];
-    }
 }
-
