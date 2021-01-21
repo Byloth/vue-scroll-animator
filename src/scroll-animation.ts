@@ -52,9 +52,19 @@ export default class ScrollAnimation
     protected _computeRatio: (scrollValue: number) => number;
     protected _getScrollValue: (element?: Element) => number;
 
+    public get isEnabled(): boolean
+    {
+        return this._enabled;
+    }
+
     public constructor(options: AnimationOptions)
     {
         const _options = { ...ScrollAnimation.DEFAULT_OPTIONS, ...options };
+
+        if (options.target === undefined)
+        {
+            throw new Error("'target' option must be correctly valorized.");
+        }
 
         this._enabled = true;
         this._animators = [];
@@ -195,11 +205,6 @@ export default class ScrollAnimation
         this.update();
     }
 
-    public get isEnabled(): boolean
-    {
-        return this._enabled;
-    }
-
     public enable(): void
     {
         this._enabled = true;
@@ -211,15 +216,25 @@ export default class ScrollAnimation
 
     public update(): void
     {
-        const scrollValue = this._getScrollValue();
-        const ratio = this._computeRatio(scrollValue);
-
-        for (const animator of this._animators.filter((a: BaseAnimator) => a.canBeApplied()))
+        if (this.isEnabled === true)
         {
-            animator.update(ratio);
-        }
+            const scrollValue = this._getScrollValue();
+            const ratio = this._computeRatio(scrollValue);
 
-        this._lastRatio = ratio;
-        this._lastScrollValue = scrollValue;
+            for (const animator of this._animators)
+            {
+                animator.update(ratio);
+            }
+
+            this._lastRatio = ratio;
+            this._lastScrollValue = scrollValue;
+        }
+    }
+
+    public destroy(): void
+    {
+        this.disable();
+
+        this._animators = [];
     }
 }

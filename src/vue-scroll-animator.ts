@@ -9,49 +9,39 @@ import _Vue from "vue";
 
 import ScrollAnimation, { AnimationOptions } from "./scroll-animation";
 
+interface VueScrollAnimatorData { _scrollAnimations: ScrollAnimation[]; }
+
 export default class VueScrollAnimator
 {
     public static install(Vue: typeof _Vue, configuration?: unknown): void
     {
-        const self = new VueScrollAnimator();
-
-        self.init();
+        const scrollAnimator = new VueScrollAnimator();
 
         Vue.mixin({
-            data: (): { _scrollAnimations: ScrollAnimation[] } => ({ _scrollAnimations: [] }),
-
+            data: (): VueScrollAnimatorData => ({ _scrollAnimations: [] }),
             destroyed: function(): void
             {
-                (this as Vue)._scrollAnimations = [];
+                const self = (this as Vue);
+
+                for (const animation of self._scrollAnimations)
+                {
+                    scrollAnimator.remove(animation);
+                }
+
+                self._scrollAnimations = [];
             }
         });
 
-        Vue.prototype.$initScrollAnimation = function(options: AnimationOptions): ScrollAnimation
+        Vue.prototype.$scrollAnimate = function(options: AnimationOptions): ScrollAnimation
         {
-            const animation = self.animate.call(self, { target: this.$el, ...options });
+            const animation = scrollAnimator.animate({ target: this.$el, ...options });
 
             this._scrollAnimations.push(animation);
 
             return animation;
         };
-        Vue.prototype.$destroyScrollAnimation = function(animation: ScrollAnimation): void
-        {
-            const remove = (animations: ScrollAnimation[], animation: ScrollAnimation) =>
-            {
-                const index = animations.indexOf(animation);
 
-                if (index !== -1)
-                {
-                    animations.splice(index, 1);
-                }
-                else
-                {
-                    throw new Error(`The animation object "${animation}" doesn't exists in the animations array.`);
-                }
-            };
-
-            self.deanimate.call(self, animation);
-        };
+        scrollAnimator.init();
     }
 
     protected _isUpdating: boolean;
@@ -62,6 +52,7 @@ export default class VueScrollAnimator
     public constructor()
     {
         this._isUpdating = false;
+
         this._animations = [];
     }
 
@@ -70,11 +61,12 @@ export default class VueScrollAnimator
         if (this._isUpdating === false)
         {
             this._isUpdating = true;
+
             this._requestId = window.requestAnimationFrame((timestamp: number) =>
             {
                 if (this._isUpdating === true)
                 {
-                    for (const animation of this._animations.filter((a: ScrollAnimation) => a.isEnabled))
+                    for (const animation of this._animations)
                     {
                         animation.update();
                     }
@@ -87,21 +79,11 @@ export default class VueScrollAnimator
 
     public animate(options: AnimationOptions): ScrollAnimation
     {
-        if (options.target === undefined)
-        {
-            throw new Error("'target' option must be correctly valorized.");
-        }
-
         const animation = new ScrollAnimation(options);
+
         this._animations.push(animation);
 
         return animation;
-    }
-    public deanimate(animation: ScrollAnimation): void
-    {
-        this._animations = this._animations.filter((item) => item !== animation);
-
-        animation.disable();
     }
 
     public init(): void
@@ -111,6 +93,8 @@ export default class VueScrollAnimator
     }
     public destroy(): void
     {
+        this.removeAll();
+
         window.removeEventListener("resize", this._eventListener);
         window.removeEventListener("scroll", this._eventListener);
 
@@ -120,5 +104,30 @@ export default class VueScrollAnimator
 
             this._requestId = undefined;
         }
+    }
+
+    public remove(animation: ScrollAnimation): void
+    {
+        const index = this._animations.indexOf(animation);
+
+        if (index !== -1)
+        {
+            this._animations.splice(index, 1);
+        }
+        else
+        {
+            throw new Error(`The animation object "${animation}" doesn't exists in the animations array.`);
+        }
+
+        animation.destroy();
+    }
+    public removeAll(): void
+    {
+        for (const animation of this._animations)
+        {
+            animation.destroy();
+        }
+
+        this._animations = [];
     }
 }
