@@ -15,6 +15,19 @@ export default abstract class BaseAnimator
 
     protected _canBeApplied: () => boolean;
 
+    public get canBeApplied(): boolean
+    {
+        const canBeApplied = this._canBeApplied();
+
+        if (canBeApplied !== this._lastCanBeApplied)
+        {
+            this._lastRatioValue = undefined;
+            this._lastCanBeApplied = canBeApplied;
+        }
+
+        return canBeApplied;
+    }
+
     public constructor(options: BaseAnimatorOptions)
     {
         this._target = options.target!;
@@ -61,22 +74,9 @@ export default abstract class BaseAnimator
 
     protected abstract _update(ratioValue: number): void;
 
-    public canBeApplied(): boolean
-    {
-        const canBeApplied = this._canBeApplied();
-
-        if (canBeApplied !== this._lastCanBeApplied)
-        {
-            this._lastRatioValue = undefined;
-            this._lastCanBeApplied = canBeApplied;
-        }
-
-        return canBeApplied;
-    }
-
     public update(ratioValue: number): void
     {
-        if (ratioValue !== this._lastRatioValue)
+        if ((this.canBeApplied) && (ratioValue !== this._lastRatioValue))
         {
             this._update(ratioValue);
 
