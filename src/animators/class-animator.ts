@@ -18,10 +18,7 @@ export interface ClassAnimatorOptions extends BaseAnimatorOptions
 
 export default class ClassAnimator extends BaseAnimator
 {
-    public static DEFAULT_OPTIONS = {
-
-        behavior: ClassAnimatorBehavior.FROM_START
-    };
+    public static DEFAULT_OPTIONS = { behavior: ClassAnimatorBehavior.FROM_START };
 
     protected _lastIsActive?: boolean;
     protected _classesName: string[];
@@ -30,7 +27,7 @@ export default class ClassAnimator extends BaseAnimator
 
     public constructor(options: ClassAnimatorOptions)
     {
-        options = { ...ClassAnimator.DEFAULT_OPTIONS, ...options};
+        options = { ...ClassAnimator.DEFAULT_OPTIONS, ...options };
 
         super(options);
 
