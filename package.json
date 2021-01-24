@@ -42,6 +42,7 @@
     "watch": "yarn build:main --watch"
   },
   "dependencies": {
+    "@byloth/html-element-style": "^1.0.0",
     "tslib": "^2.1.0",
     "vue": "^2.6.12"
   },

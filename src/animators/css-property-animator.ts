@@ -1,9 +1,11 @@
+import HtmlElementStyle from "@byloth/html-element-style";
+
 import BaseAnimator, { BaseAnimatorOptions } from "./base-animator";
 
 export interface CssPropertyAnimatorOptions extends BaseAnimatorOptions
 {
     name: string;
-    unit?: string;
+    // unit?: string;
 
     startValue: number;
     endValue?: number;
@@ -17,24 +19,19 @@ export interface CssPropertyAnimatorOptions extends BaseAnimatorOptions
 
 export default class CssPropertyAnimator extends BaseAnimator
 {
-    public static DEFAULT_OPTIONS = {
+    public static DEFAULT_OPTIONS = { };
 
-        unit: "px"
-    };
-
-    protected _name: string;
-    protected _unit: string;
+    protected _style: HtmlElementStyle;
 
     protected _computeValue: (ratioValue: number) => number;
 
     public constructor(options: CssPropertyAnimatorOptions)
     {
-        options = { ...CssPropertyAnimator.DEFAULT_OPTIONS, ...options};
+        options = { ...CssPropertyAnimator.DEFAULT_OPTIONS, ...options };
 
         super(options);
 
-        this._name = options.name;
-        this._unit = options.unit!;
+        this._style = new HtmlElementStyle(this._target, [options.name]);
 
         if (options.computeValue !== undefined)
         {
