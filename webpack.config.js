@@ -9,8 +9,8 @@ const BANNER = `
 /*!
  * Vue Scroll Animator v${PACKAGE.version} (https://byloth.github.io/vue-scroll-animator)
  *
- *  -> Copyright © 2019 - 2020, Matteo Bilotta
- *  -> Licensed under GNU v3 (https://github.com/Byloth/vue-scroll-animator/blob/master/LICENSE)
+ *  -> Copyright © 2019 - 2021, Matteo Bilotta
+ *  -> Licensed under GPL v3 (https://github.com/Byloth/vue-scroll-animator/blob/master/LICENSE)
  */
 `;
 
