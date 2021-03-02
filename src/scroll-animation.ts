@@ -1,8 +1,6 @@
 import { BaseAnimator, ClassAnimator, CssPropertyAnimator } from "./animators";
 import { ClassAnimatorOptions, CssPropertyAnimatorOptions } from "./animators";
 
-export type Orientation = "horizontal" | "vertical";
-
 export interface AnimationOptions
 {
     target?: HTMLElement;
@@ -10,7 +8,7 @@ export interface AnimationOptions
     startingValue: number;
     maxDifference?: number;
     endingValue?: number;
-    orientation?: Orientation;
+    orientation?: "horizontal" | "vertical";
 
     classes?: ClassAnimatorOptions[];
     cssProperties?: CssPropertyAnimatorOptions[];
@@ -21,7 +19,7 @@ export interface AnimationOptions
 export default class ScrollAnimation
 {
     public static readonly DEFAULT_OPTIONS = {
-        orientation: "vertical" as Orientation,
+        orientation: "vertical",
 
         classes: [],
         cssProperties: []
