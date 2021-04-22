@@ -8,14 +8,22 @@ import ScrollAnimation, { AnimationOptions } from "./animations";
 
 class VueScrollAnimator implements PluginObject<unknown>
 {
+    public static readonly SLOW_EXECUTION_THRESHOLD: number = 75;
+
+    protected _isScrolling: boolean;
     protected _isUpdating: boolean;
+
+    protected _lastUpdate?: number;
     protected _requestId?: number;
+    protected _timeoutId?: number;
 
     protected _animations: ScrollAnimation[];
 
     public constructor()
     {
+        this._isScrolling = false;
         this._isUpdating = false;
+
         this._animations = [];
     }
 
@@ -28,17 +36,49 @@ class VueScrollAnimator implements PluginObject<unknown>
                 animation.update();
             }
 
+            if (this._isScrolling === true)
+            {
+                if (this._lastUpdate !== undefined)
+                {
+                    const elapsedTime = timestamp - this._lastUpdate;
+
+                    if (elapsedTime > VueScrollAnimator.SLOW_EXECUTION_THRESHOLD)
+                    {
+                        // tslint:disable-next-line: no-console
+                        console.warn(`Frame updated took ${elapsedTime}ms`);
+                    }
+                }
+
+                this._lastUpdate = timestamp;
+            }
+
             this._isUpdating = false;
         }
     };
 
     protected _eventListener = (evt: Event): void =>
     {
+        this._isScrolling = true;
+
         if (this._isUpdating === false)
         {
             this._isUpdating = true;
             this._requestId = window.requestAnimationFrame(this._requestCallback);
         }
+
+        if (this._timeoutId !== undefined)
+        {
+            clearTimeout(this._timeoutId);
+
+            this._timeoutId = undefined;
+        }
+
+        this._timeoutId = setTimeout(() =>
+        {
+            this._isScrolling = false;
+            this._lastUpdate = undefined;
+
+        }, VueScrollAnimator.SLOW_EXECUTION_THRESHOLD);
     };
 
     public animate(options: AnimationOptions): ScrollAnimation
