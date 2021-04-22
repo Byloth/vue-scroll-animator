@@ -1,31 +1,37 @@
-import BaseAnimator from "../../animators";
+import BaseAnimator, { BaseAnimatorOptions } from "./base-animator";
 
-import _ClassAnimatorOptions, { ClassAnimatorBehavior } from "./options";
+export enum ClassAnimatorBehavior
+{
+    FROM_START = 0,
+    UNTIL_START = 1,
+    BETWEEN_START_END = 2,
+    EXCEPT_START_END = 3,
+    FROM_END = 4,
+    UNTIL_END = 5
+}
+
+export interface ClassAnimatorOptions extends BaseAnimatorOptions
+{
+    classesName: string[];
+    behavior?: ClassAnimatorBehavior;
+}
 
 export default class ClassAnimator extends BaseAnimator
 {
-    public static DEFAULT_OPTIONS = {
-
-        behavior: ClassAnimatorBehavior.FROM_START
-    };
+    public static DEFAULT_OPTIONS = { behavior: ClassAnimatorBehavior.FROM_START };
 
     protected _lastIsActive?: boolean;
     protected _classesName: string[];
 
-    protected _isActive!: (ratioValue: number) => boolean;
+    protected _isActive: (ratioValue: number) => boolean;
 
-    public constructor(options: _ClassAnimatorOptions)
+    public constructor(options: ClassAnimatorOptions)
     {
-        options = { ...ClassAnimator.DEFAULT_OPTIONS, ...options};
+        options = { ...ClassAnimator.DEFAULT_OPTIONS, ...options };
 
         super(options);
 
         this._classesName = options.classesName;
-    }
-
-    protected _compile(options: _ClassAnimatorOptions): void
-    {
-        super._compile(options);
 
         if (options.behavior === ClassAnimatorBehavior.FROM_START)
         {
@@ -91,6 +97,3 @@ export default class ClassAnimator extends BaseAnimator
         }
     }
 }
-
-export { ClassAnimatorBehavior };
-export type ClassAnimatorOptions = _ClassAnimatorOptions;

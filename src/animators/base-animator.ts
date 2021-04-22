@@ -1,4 +1,10 @@
-import BaseAnimatorOptions from "./options";
+export interface BaseAnimatorOptions
+{
+    target?: HTMLElement;
+
+    minWidth?: number;
+    maxWidth?: number;
+}
 
 export default abstract class BaseAnimator
 {
@@ -7,35 +13,34 @@ export default abstract class BaseAnimator
 
     protected _target: HTMLElement;
 
-    protected _canBeApplied!: (windowWidth: number) => boolean;
+    protected _canBeApplied: () => boolean;
 
     public constructor(options: BaseAnimatorOptions)
     {
         this._target = options.target!;
 
-        this._compile(options);
-    }
-
-    protected _compile(options: BaseAnimatorOptions): void
-    {
         if (options.minWidth !== undefined)
         {
             const minWidth = options.minWidth;
 
             if (options.maxWidth === undefined)
             {
-                this._canBeApplied = (windowWidth: number): boolean => (minWidth <= windowWidth);
+                this._canBeApplied = (): boolean => (minWidth <= window.innerWidth);
             }
             else if (minWidth < options.maxWidth)
             {
                 const maxWidth = options.maxWidth;
 
-                this._canBeApplied = (windowWidth: number): boolean =>
-                    ((minWidth <= windowWidth) && (windowWidth <= maxWidth));
+                this._canBeApplied = (): boolean =>
+                {
+                    const windowWidth = window.innerWidth;
+
+                    return ((minWidth <= windowWidth) && (windowWidth <= maxWidth));
+                };
             }
             else if (minWidth === options.maxWidth)
             {
-                this._canBeApplied = (windowWidth: number): boolean => (minWidth === windowWidth);
+                this._canBeApplied = (): boolean => (minWidth === window.innerWidth);
             }
             else
             {
@@ -46,19 +51,19 @@ export default abstract class BaseAnimator
         {
             const maxWidth = options.maxWidth;
 
-            this._canBeApplied = (windowWidth: number): boolean => (windowWidth <= maxWidth);
+            this._canBeApplied = (): boolean => (window.innerWidth <= maxWidth);
         }
         else
         {
-            this._canBeApplied = (windowWidth: number): boolean => (true);
+            this._canBeApplied = (): boolean => true;
         }
     }
 
     protected abstract _update(ratioValue: number): void;
 
-    public canBeApplied(windowWidth: number): boolean
+    public update(ratioValue: number): void
     {
-        const canBeApplied = this._canBeApplied(windowWidth);
+        const canBeApplied = this._canBeApplied();
 
         if (canBeApplied !== this._lastCanBeApplied)
         {
@@ -66,12 +71,7 @@ export default abstract class BaseAnimator
             this._lastCanBeApplied = canBeApplied;
         }
 
-        return canBeApplied;
-    }
-
-    public update(ratioValue: number): void
-    {
-        if (ratioValue !== this._lastRatioValue)
+        if ((canBeApplied) && (ratioValue !== this._lastRatioValue))
         {
             this._update(ratioValue);
 
@@ -79,5 +79,3 @@ export default abstract class BaseAnimator
         }
     }
 }
-
-export { BaseAnimatorOptions };

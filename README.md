@@ -64,8 +64,8 @@ export default class ExampleVueComponent extends Vue
     {
         this._animation = this.$initScrollAnimation({
 
-            startValue: 0,
-            endValue: 128,
+            startingValue: 0,
+            endingValue: 128,
             classes: [{
 
                 classesName: [ "active" ],

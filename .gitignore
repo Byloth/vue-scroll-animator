@@ -12,11 +12,9 @@ Desktop.ini
 
 # Generated & compiled files
 #
+/build/
+/types/
 /*.tgz
-
-*.d.ts
-*.js
-*.js.map
 
 # Downloadable & installable modules & components
 #
@@ -25,8 +23,3 @@ Desktop.ini
 # Not ignored
 #
 !.gitkeep
-
-# Config files
-#
-!*.config.js
-!.eslintrc.js
