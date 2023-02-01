@@ -1,29 +1,21 @@
-import { BaseAnimator, ClassAnimator, CssPropertyAnimator } from "./animators/index.js";
-import type { ClassAnimatorOptions, CssPropertyAnimatorOptions } from "./animators/index.js";
+import { Animator, ClassAnimator, StyleAnimator } from "./animator/index.js";
 
-export interface AnimationOptions
-{
-    target?: HTMLElement;
+import type { ComponentInstance } from "../types/index.js";
+import type { AnimationOptions } from "../types/animation.js";
 
-    startingValue: number;
-    maxDifference?: number;
-    endingValue?: number;
-    orientation?: "horizontal" | "vertical";
-
-    classes?: ClassAnimatorOptions[];
-    cssProperties?: CssPropertyAnimatorOptions[];
-
-    computeRatio?: (scrollValue: number) => number;
-}
+export type ScrollAnimate = (this: ComponentInstance, options: AnimationOptions) => ScrollAnimation;
 
 export default class ScrollAnimation
 {
-    public static readonly DEFAULT_OPTIONS = {
-        orientation: "vertical",
+    public static get DEFAULT_OPTIONS()
+    {
+        return {
+            orientation: "vertical",
 
-        classes: [],
-        cssProperties: []
-    };
+            classes: [],
+            styles: []
+        };
+    }
 
     public static Normalize(value: number): number
     {
@@ -31,18 +23,16 @@ export default class ScrollAnimation
         {
             return 0;
         }
-        else if (value >= 1)
+        if (value >= 1)
         {
             return 1;
         }
-        else
-        {
-            return value;
-        }
+
+        return value;
     }
 
     protected _enabled: boolean;
-    protected _animators: BaseAnimator[];
+    protected _animators: Animator[];
 
     protected _lastRatio: number;
     protected _lastScrollValue: number;
@@ -75,18 +65,18 @@ export default class ScrollAnimation
             this._animators.push(new ClassAnimator({ target: _options.target, ...classOptions }));
         }
 
-        for (const cssPropertyOptions of _options.cssProperties!)
+        for (const styleOptions of _options.styles!)
         {
-            this._animators.push(new CssPropertyAnimator({ target: _options.target, ...cssPropertyOptions }));
+            this._animators.push(new StyleAnimator({ target: _options.target, ...styleOptions }));
         }
 
         if (_options.computeRatio !== undefined)
         {
             this._computeRatio = _options.computeRatio;
         }
-        else if (_options.endingValue === undefined)
+        else if (_options.endValue === undefined)
         {
-            const startValue = _options.startingValue;
+            const startValue = _options.startValue;
 
             if (_options.maxDifference === undefined)
             {
@@ -96,10 +86,8 @@ export default class ScrollAnimation
                     {
                         return 0;
                     }
-                    else
-                    {
-                        return (scrollValue - startValue);
-                    }
+
+                    return (scrollValue - startValue);
                 };
             }
             else
@@ -112,25 +100,23 @@ export default class ScrollAnimation
                     {
                         return 0;
                     }
-                    else
-                    {
-                        const difference = scrollValue - this._lastScrollValue;
-                        const partialRatio = difference / maxDifference;
 
-                        return ScrollAnimation.Normalize(partialRatio + this._lastRatio);
-                    }
+                    const difference = scrollValue - this._lastScrollValue;
+                    const partialRatio = difference / maxDifference;
+
+                    return ScrollAnimation.Normalize(partialRatio + this._lastRatio);
                 };
             }
 
         }
-        else if (_options.startingValue <= _options.endingValue)
+        else if (_options.startValue <= _options.endValue)
         {
-            const startValue = _options.startingValue;
-            const endValue = _options.endingValue;
+            const startValue = _options.startValue;
+            const endValue = _options.endValue;
 
             if (_options.maxDifference === undefined)
             {
-                const difference = _options.endingValue - _options.startingValue;
+                const difference = _options.endValue - _options.startValue;
 
                 this._computeRatio = (scrollValue: number): number =>
                 {
@@ -138,14 +124,12 @@ export default class ScrollAnimation
                     {
                         return 0;
                     }
-                    else if (scrollValue >= endValue)
+                    if (scrollValue >= endValue)
                     {
                         return 1;
                     }
-                    else
-                    {
-                        return ((scrollValue - startValue) / difference);
-                    }
+
+                    return ((scrollValue - startValue) / difference);
                 };
             }
             else
@@ -158,17 +142,15 @@ export default class ScrollAnimation
                     {
                         return 0;
                     }
-                    else if (scrollValue >= endValue)
+                    if (scrollValue >= endValue)
                     {
                         return 1;
                     }
-                    else
-                    {
-                        const difference = scrollValue - this._lastScrollValue;
-                        const partialRatio = difference / maxDifference;
 
-                        return ScrollAnimation.Normalize(partialRatio + this._lastRatio);
-                    }
+                    const difference = scrollValue - this._lastScrollValue;
+                    const partialRatio = difference / maxDifference;
+
+                    return ScrollAnimation.Normalize(partialRatio + this._lastRatio);
                 };
             }
         }
@@ -181,16 +163,19 @@ export default class ScrollAnimation
         {
             // if (element !== undefined)
             // {
-            //     return element.scrollLeft;
+            //     this._getScrollValue = (): number => element.scrollLeft;
             // }
 
             this._getScrollValue = (): number => window.pageXOffset;
         }
+        //
+        // TODO: Gestire lo scroll legato ad un elemento specifico.
+        //
         else if (_options.orientation === "vertical")
         {
             // if (element !== undefined)
             // {
-            //     return element.scrollTop;
+            //     this._getScrollValue = (): number => element.scrollTop;
             // }
 
             this._getScrollValue = (): number => window.pageYOffset;
@@ -217,12 +202,14 @@ export default class ScrollAnimation
         if (this.isEnabled === true)
         {
             const scrollValue = this._getScrollValue();
+            if (scrollValue === this._lastScrollValue)
+            {
+                return;
+            }
+
             const ratio = this._computeRatio(scrollValue);
 
-            for (const animator of this._animators)
-            {
-                animator.update(ratio);
-            }
+            this._animators.forEach((animator) => animator.update(ratio));
 
             this._lastRatio = ratio;
             this._lastScrollValue = scrollValue;

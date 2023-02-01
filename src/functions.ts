@@ -1,9 +1,12 @@
-import type { App, ComponentPublicInstance, Plugin } from "vue";
+import { inject, onScopeDispose } from "vue";
+import type { App, Plugin } from "vue";
 
-import type ScrollAnimation from "./scroll-animation.js";
-import type { AnimationOptions } from "./scroll-animation.js";
-
+import { InjectionKeys } from "./core.js";
+import type ScrollAnimation from "./models/scroll-animation.js";
+import type { ScrollAnimate } from "./models/scroll-animation.js";
 import ScrollAnimator from "./scroll-animator.js";
+import type { ComponentInstance } from "./types/index.js";
+import type { AnimationOptions } from "./types/animation.js";
 
 export const createScrollAnimator = (options?: unknown): Plugin =>
 {
@@ -11,41 +14,32 @@ export const createScrollAnimator = (options?: unknown): Plugin =>
         install: (app: App): void =>
         {
             const $scrollAnimator = new ScrollAnimator(options);
-            const $scrollAnimate = function(this: ComponentPublicInstance | undefined, options: AnimationOptions): ScrollAnimation
+            const $scrollAnimate = function(this: ComponentInstance, options: AnimationOptions): ScrollAnimation
             {
-                // TODO: Understand what `this` is inside this context.
-                //
-
                 const animation = $scrollAnimator.animate({ target: this?.$el, ...options });
 
-                //
-                // TBD: How to automatically register something on unmounted inside this context?
-                //
-                // interface VueScrollAnimatorData { _scrollAnimations: ScrollAnimation[]; }
-                //
-                // Vue.mixin({
-                //     data: (): VueScrollAnimatorData => ({ _scrollAnimations: [] }),
-                //     destroyed: function(): void
-                //     {
-                //         const self = (this as Vue);
-
-                //         for (const animation of self._scrollAnimations)
-                //         {
-                //             scrollAnimator.remove(animation);
-                //         }
-
-                //         self._scrollAnimations = [];
-                //     }
-                // });
+                onScopeDispose(() => $scrollAnimator.remove(animation));
 
                 return animation;
             };
 
             app.config.globalProperties.$scrollAnimate = $scrollAnimate;
+            app.provide(InjectionKeys.$scrollAnimate, $scrollAnimate);
 
-            // app.provide(InjectionKeys.$vuert, $vuert);
-
-            $scrollAnimator.init();
+            $scrollAnimator.initialize();
         }
     };
+};
+export const useScrollAnimator = (): ScrollAnimate =>
+{
+    const $scrollAnimate = inject(InjectionKeys.$scrollAnimate);
+    if (!$scrollAnimate)
+    {
+        throw new Error(
+            "`useScrollAnimator` was called with no active instance. " +
+            "Did you forget to install `VueScrollAnimator` plugin in your App?"
+        );
+    }
+
+    return $scrollAnimate;
 };

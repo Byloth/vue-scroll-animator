@@ -1,12 +1,6 @@
-export interface BaseAnimatorOptions
-{
-    target?: HTMLElement;
+import type { AnimatorOptions } from "@src/types/animator/core.js";
 
-    minWidth?: number;
-    maxWidth?: number;
-}
-
-export default abstract class BaseAnimator
+export default abstract class Animator
 {
     protected _lastRatioValue?: number;
     protected _lastCanBeApplied?: boolean;
@@ -15,7 +9,7 @@ export default abstract class BaseAnimator
 
     protected _canBeApplied: () => boolean;
 
-    public constructor(options: BaseAnimatorOptions)
+    public constructor(options: AnimatorOptions)
     {
         this._target = options.target!;
 

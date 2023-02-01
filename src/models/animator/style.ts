@@ -1,33 +1,22 @@
-import BaseAnimator from "./base-animator.js";
-import type { BaseAnimatorOptions } from "./base-animator.js";
+import type { StyleAnimatorOptions } from "@src/types/animator/style.js";
 
-export interface CssPropertyAnimatorOptions extends BaseAnimatorOptions
+import Animator from "./core.js";
+
+export default class StyleAnimator extends Animator
 {
-    name: string;
-    unit?: string;
-
-    startValue: number;
-    endValue?: number;
-
-    // direction?: string; -> normal / inverse
-    // speed?: number; -> 1x / 2x / 0.5x / ...
-    // timing?: string; -> linear / ease / cubic
-
-    computeValue?: (ratioValue: number) => number;
-}
-
-export default class CssPropertyAnimator extends BaseAnimator
-{
-    public static DEFAULT_OPTIONS = { unit: "px" };
+    public static get DEFAULT_OPTIONS()
+    {
+        return { unit: "px" };
+    }
 
     protected _name: string;
     protected _unit: string;
 
     protected _computeValue: (ratioValue: number) => number;
 
-    public constructor(options: CssPropertyAnimatorOptions)
+    public constructor(options: StyleAnimatorOptions)
     {
-        options = { ...CssPropertyAnimator.DEFAULT_OPTIONS, ...options };
+        options = { ...StyleAnimator.DEFAULT_OPTIONS, ...options };
 
         super(options);
 

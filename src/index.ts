@@ -1,10 +1,10 @@
 import ScrollAnimator from "./scroll-animator.js";
 export default ScrollAnimator;
 
-import ScrollAnimation from "./scroll-animation.js";
-import type { AnimationOptions } from "./scroll-animation.js";
+import ScrollAnimation from "./models/scroll-animation.js";
+import type { AnimationOptions } from "./types/animation.js";
 export { ScrollAnimation, AnimationOptions };
 
-export { ClassAnimatorBehavior } from "./animators/index.js";
-export { BaseAnimator, ClassAnimator, CssPropertyAnimator } from "./animators/index.js";
-export type { BaseAnimatorOptions, ClassAnimatorOptions, CssPropertyAnimatorOptions } from "./animators/index.js";
+export { Animator, ClassAnimator, StyleAnimator } from "./models/animator/index.js";
+export { ClassAnimatorBehavior } from "./types/animator/class.js";
+export type { AnimatorOptions, ClassAnimatorOptions, StyleAnimatorOptions } from "./types/animator/index.js";

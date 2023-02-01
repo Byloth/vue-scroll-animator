@@ -1,27 +1,14 @@
-import BaseAnimator from "./base-animator.js";
-import type { BaseAnimatorOptions } from "./base-animator.js";
+import { ClassAnimatorBehavior } from "@src/types/animator/class.js";
+import type { ClassAnimatorOptions } from "@src/types/animator/class.js";
 
-export enum ClassAnimatorBehavior
+import Animator from "./core.js";
+
+export default class ClassAnimator extends Animator
 {
-    /* eslint-disable no-unused-vars */
-
-    FROM_START = 0,
-    UNTIL_START = 1,
-    BETWEEN_START_END = 2,
-    EXCEPT_START_END = 3,
-    FROM_END = 4,
-    UNTIL_END = 5
-}
-
-export interface ClassAnimatorOptions extends BaseAnimatorOptions
-{
-    classesName: string[];
-    behavior?: ClassAnimatorBehavior;
-}
-
-export default class ClassAnimator extends BaseAnimator
-{
-    public static DEFAULT_OPTIONS = { behavior: ClassAnimatorBehavior.FROM_START };
+    public static get DEFAULT_OPTIONS()
+    {
+        return { behavior: ClassAnimatorBehavior.FROM_START };
+    }
 
     protected _lastIsActive?: boolean;
     protected _classesName: string[];

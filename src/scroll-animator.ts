@@ -2,8 +2,8 @@
 // Based on: https://github.com/janpaepke/ScrollMagic
 //
 
-import ScrollAnimation from "./scroll-animation.js";
-import type { AnimationOptions } from "./scroll-animation.js";
+import ScrollAnimation from "./models/scroll-animation.js";
+import type { AnimationOptions } from "./types/animation.js";
 
 export default class VueScrollAnimator
 {
@@ -11,13 +11,6 @@ export default class VueScrollAnimator
     protected _requestId?: number;
 
     protected _animations: ScrollAnimation[];
-
-    public constructor(options?: unknown)
-    {
-        this._isUpdating = false;
-
-        this._animations = [];
-    }
 
     protected _eventListener = (evt: Event): void =>
     {
@@ -29,34 +22,27 @@ export default class VueScrollAnimator
             {
                 if (this._isUpdating === true)
                 {
-                    for (const animation of this._animations)
-                    {
-                        animation.update();
-                    }
-
+                    this._animations.forEach((animation) => animation.update());
                     this._isUpdating = false;
                 }
             });
         }
     };
 
-    public animate(options: AnimationOptions): ScrollAnimation
+    public constructor(options?: unknown)
     {
-        const animation = new ScrollAnimation(options);
-
-        this._animations.push(animation);
-
-        return animation;
+        this._isUpdating = false;
+        this._animations = [];
     }
 
-    public init(): void
+    public initialize(): void
     {
         window.addEventListener("resize", this._eventListener, { capture: true, passive: true });
         window.addEventListener("scroll", this._eventListener, { capture: true, passive: true });
     }
     public destroy(): void
     {
-        this.removeAll();
+        this.clean();
 
         window.removeEventListener("resize", this._eventListener);
         window.removeEventListener("scroll", this._eventListener);
@@ -69,28 +55,30 @@ export default class VueScrollAnimator
         }
     }
 
+    public animate(options: AnimationOptions): ScrollAnimation
+    {
+        const animation = new ScrollAnimation(options);
+
+        this._animations.push(animation);
+
+        return animation;
+    }
     public remove(animation: ScrollAnimation): void
     {
         const index = this._animations.indexOf(animation);
-
-        if (index !== -1)
-        {
-            this._animations.splice(index, 1);
-        }
-        else
+        if (index === -1)
         {
             throw new Error(`The animation object "${animation}" doesn't exists in the animations array.`);
         }
 
         animation.destroy();
-    }
-    public removeAll(): void
-    {
-        for (const animation of this._animations)
-        {
-            animation.destroy();
-        }
 
+        this._animations.splice(index, 1);
+    }
+
+    public clean(): void
+    {
+        this._animations.forEach((animation) => animation.destroy());
         this._animations = [];
     }
 }
