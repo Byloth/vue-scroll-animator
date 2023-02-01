@@ -1,7 +1,20 @@
-export interface AnimatorOptions
+export interface CoreAnimatorOptions
 {
     target?: HTMLElement;
 
-    minWidth?: number;
-    maxWidth?: number;
+    mediaQuery?: string;
 }
+
+type PropertiesToOmit = number |
+    "length" |
+    "parentRule" |
+    "getPropertyPriority" |
+    "getPropertyValue" |
+    "item" |
+    "removeProperty" |
+    "setProperty";
+
+type StyleDefinition = Omit<CSSStyleDeclaration, PropertiesToOmit>;
+
+export type StyleProperties = keyof StyleDefinition;
+export type StyleResult = { [P in StyleProperties]?: string };

@@ -1,17 +1,25 @@
-import { Animator, ClassAnimator, StyleAnimator } from "./animator/index.js";
+import { ValueException } from "@byloth/exceptions";
+
+import type Animator from "./animator/core.js";
+import { ClassAnimator, StyleAnimator } from "./animator/index.js";
 
 import type { ComponentInstance } from "../types/index.js";
-import type { AnimationOptions } from "../types/animation.js";
+import type { AnimationOptions, RatioAnimation, EndlessAnimation, CustomAnimation } from "../types/animation/index.js";
 
 export default class Animation
 {
     public static get DEFAULT_OPTIONS()
     {
         return {
+            startValue: 0,
             orientation: "vertical",
 
+            easing: (input: number) => input,
+            speed: 1,
+
             classes: [],
-            styles: []
+            styles: [],
+            customs: []
         };
     }
 
@@ -43,13 +51,15 @@ export default class Animation
         return this._enabled;
     }
 
+    public constructor(options: RatioAnimation);
+    public constructor(options: EndlessAnimation);
+    public constructor(options: CustomAnimation);
     public constructor(options: AnimationOptions)
     {
         const _options = { ...Animation.DEFAULT_OPTIONS, ...options };
-
-        if (options.target === undefined)
+        if (_options.target === undefined)
         {
-            throw new Error("'target' option must be correctly valorized.");
+            throw new ValueException("'target' option must be correctly valorized.");
         }
 
         this._enabled = true;
@@ -58,25 +68,83 @@ export default class Animation
         this._lastRatio = 0;
         this._lastScrollValue = 0;
 
-        for (const classOptions of _options.classes!)
+        for (const classOptions of _options.classes)
         {
             this._animators.push(new ClassAnimator({ target: _options.target, ...classOptions }));
         }
-
-        for (const styleOptions of _options.styles!)
+        for (const styleOptions of _options.styles)
         {
             this._animators.push(new StyleAnimator({ target: _options.target, ...styleOptions }));
+        }
+        //
+        // TODO: Handle `_options.customs`
+        //
+
+        if (!this._animators.length)
+        {
+            throw new ValueException(
+                "At least one property between 'classes', 'styles'" +
+                " or 'customs' needs to be correctly valorized."
+            );
         }
 
         if (_options.computeRatio !== undefined)
         {
             this._computeRatio = _options.computeRatio;
         }
-        else if (_options.endValue === undefined)
+        else if (_options.endValue !== undefined)
+        {
+            if (_options.startValue > _options.endValue)
+            {
+                throw new ValueException("'startValue' option must be less than or equal to 'endValue'.");
+            }
+
+            const startValue = _options.startValue;
+            const endValue = _options.endValue;
+
+            const difference = endValue - startValue;
+
+            this._computeRatio = (scrollValue: number): number =>
+            {
+                if (scrollValue <= startValue)
+                {
+                    return 0;
+                }
+                if (scrollValue >= endValue)
+                {
+                    return 1;
+                }
+
+                return ((scrollValue - startValue) / difference);
+            };
+        }
+        else
         {
             const startValue = _options.startValue;
 
-            if (_options.maxDifference === undefined)
+            if (_options.boundary !== undefined)
+            {
+                if (_options.boundary < 0)
+                {
+                    throw new ValueException("'boundary' option must be greater than 0.");
+                }
+
+                const boundary = _options.boundary;
+
+                this._computeRatio = (scrollValue: number): number =>
+                {
+                    if (scrollValue <= startValue)
+                    {
+                        return 0;
+                    }
+
+                    const difference = scrollValue - this._lastScrollValue;
+                    const partialRatio = difference / boundary;
+
+                    return Animation.Normalize(partialRatio + this._lastRatio);
+                };
+            }
+            else
             {
                 this._computeRatio = (scrollValue: number): number =>
                 {
@@ -88,73 +156,6 @@ export default class Animation
                     return (scrollValue - startValue);
                 };
             }
-            else
-            {
-                const maxDifference = Math.abs(_options.maxDifference);
-
-                this._computeRatio = (scrollValue: number): number =>
-                {
-                    if (scrollValue <= startValue)
-                    {
-                        return 0;
-                    }
-
-                    const difference = scrollValue - this._lastScrollValue;
-                    const partialRatio = difference / maxDifference;
-
-                    return Animation.Normalize(partialRatio + this._lastRatio);
-                };
-            }
-
-        }
-        else if (_options.startValue <= _options.endValue)
-        {
-            const startValue = _options.startValue;
-            const endValue = _options.endValue;
-
-            if (_options.maxDifference === undefined)
-            {
-                const difference = _options.endValue - _options.startValue;
-
-                this._computeRatio = (scrollValue: number): number =>
-                {
-                    if (scrollValue <= startValue)
-                    {
-                        return 0;
-                    }
-                    if (scrollValue >= endValue)
-                    {
-                        return 1;
-                    }
-
-                    return ((scrollValue - startValue) / difference);
-                };
-            }
-            else
-            {
-                const maxDifference = Math.abs(_options.maxDifference);
-
-                this._computeRatio = (scrollValue: number): number =>
-                {
-                    if (scrollValue <= startValue)
-                    {
-                        return 0;
-                    }
-                    if (scrollValue >= endValue)
-                    {
-                        return 1;
-                    }
-
-                    const difference = scrollValue - this._lastScrollValue;
-                    const partialRatio = difference / maxDifference;
-
-                    return Animation.Normalize(partialRatio + this._lastRatio);
-                };
-            }
-        }
-        else
-        {
-            throw new Error("'startValue' option must be less than or equal to 'endValue'.");
         }
 
         if (_options.orientation === "horizontal")
@@ -180,7 +181,7 @@ export default class Animation
         }
         else
         {
-            throw new Error(`'orientation' option value must be equal to "horizontal" or "vertical".`);
+            throw new ValueException(`'orientation' option value must be equal to "horizontal" or "vertical".`);
         }
 
         this.update();
@@ -197,25 +198,24 @@ export default class Animation
 
     public update(): void
     {
-        if (this.isEnabled === true)
+        const scrollValue = this._getScrollValue();
+        if (scrollValue === this._lastScrollValue)
         {
-            const scrollValue = this._getScrollValue();
-            if (scrollValue === this._lastScrollValue)
-            {
-                return;
-            }
-
-            const ratio = this._computeRatio(scrollValue);
-            if (ratio === this._lastRatio)
-            {
-                return;
-            }
-
-            this._animators.forEach((animator) => animator.update(ratio));
-
-            this._lastRatio = ratio;
-            this._lastScrollValue = scrollValue;
+            return;
         }
+
+        const ratio = this._computeRatio(scrollValue);
+        if (ratio === this._lastRatio)
+        {
+            return;
+        }
+
+        this._animators
+            .filter((animator) => animator.isEnabled)
+            .forEach((animator) => animator.update(ratio));
+
+        this._lastRatio = ratio;
+        this._lastScrollValue = scrollValue;
     }
 
     public destroy(): void

@@ -1,89 +1,58 @@
-import { ClassAnimatorBehavior } from "@src/types/animator/class.js";
-import type { ClassAnimatorOptions } from "@src/types/animator/class.js";
+import { ValueException } from "@byloth/exceptions";
+
+import type { ClassAnimatorOptions } from "@src/types/animator/index.js";
 
 import Animator from "./core.js";
+import { AnimatorThreshold } from "./utils.js";
 
 export default class ClassAnimator extends Animator
 {
     public static get DEFAULT_OPTIONS()
     {
-        return { behavior: ClassAnimatorBehavior.FROM_START };
+        return {
+            names: [],
+
+            threshold: AnimatorThreshold.FromStart
+        };
     }
 
     protected _lastIsActive?: boolean;
-    protected _classesName: string[];
+    protected _names: string[];
 
-    protected _isActive: (ratioValue: number) => boolean;
+    protected _threshold: (ratio: number) => boolean;
 
     public constructor(options: ClassAnimatorOptions)
     {
-        options = { ...ClassAnimator.DEFAULT_OPTIONS, ...options };
+        const _options = { ...ClassAnimator.DEFAULT_OPTIONS, ...options };
+        super(_options);
 
-        super(options);
+        this._names = _options.names;
+        if (!this._names.length)
+        {
+            throw new ValueException(
+                "At least one property between 'classes', 'styles'" +
+                " or 'customs' needs to be correctly valorized."
+            );
+        }
 
-        this._classesName = options.classesName;
-
-        if (options.behavior === ClassAnimatorBehavior.FROM_START)
-        {
-            this._isActive = (ratioValue: number) => (ratioValue > 0);
-        }
-        else if (options.behavior === ClassAnimatorBehavior.UNTIL_START)
-        {
-            this._isActive = (ratioValue: number) => (ratioValue <= 0);
-        }
-        else if (options.behavior === ClassAnimatorBehavior.BETWEEN_START_END)
-        {
-            this._isActive = (ratioValue: number) => ((ratioValue > 0) && (ratioValue < 1));
-        }
-        else if (options.behavior === ClassAnimatorBehavior.EXCEPT_START_END)
-        {
-            this._isActive = (ratioValue: number) => ((ratioValue <= 0) && (ratioValue >= 1));
-        }
-        else if (options.behavior === ClassAnimatorBehavior.FROM_END)
-        {
-            this._isActive = (ratioValue: number) => (ratioValue >= 1);
-        }
-        else if (options.behavior === ClassAnimatorBehavior.UNTIL_END)
-        {
-            this._isActive = (ratioValue: number) => (ratioValue < 1);
-        }
-        else
-        {
-            throw new Error(`Invalid value "${options.behavior}" for 'behavior' option.`);
-        }
+        this._threshold = _options.threshold;
     }
 
-    protected _update(ratioValue: number): void
+    public update(ratio: number): void
     {
-        const isActive = this._isActive(ratioValue);
-
+        const isActive = this._threshold(ratio);
         if (isActive !== this._lastIsActive)
         {
             if (isActive === true)
             {
-                this.addClasses();
+                this._target.classList.add(...this._names);
             }
             else
             {
-                this.removeClasses();
+                this._target.classList.remove(...this._names);
             }
 
             this._lastIsActive = isActive;
-        }
-    }
-
-    public addClasses(): void
-    {
-        for (const className of this._classesName)
-        {
-            this._target.classList.add(className);
-        }
-    }
-    public removeClasses(): void
-    {
-        for (const className of this._classesName)
-        {
-            this._target.classList.remove(className);
         }
     }
 }

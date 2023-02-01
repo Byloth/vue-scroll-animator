@@ -10,10 +10,13 @@ export default defineConfig({
       name: "VueScrollAnimator"
     },
     rollupOptions: {
-      external: ["vue"],
+      external: ["@byloth/exceptions", "vue"],
       output: {
         exports: "named",
-        globals: { "vue": "Vue" },
+        globals: {
+          "@byloth/exceptions": "Exceptions",
+          "vue": "Vue"
+        },
         sourcemap: true
       }
     }

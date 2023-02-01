@@ -2,8 +2,10 @@
 // Based on: https://github.com/janpaepke/ScrollMagic
 //
 
+import { ReferenceException } from "@byloth/exceptions";
+
 import Animation from "./models/animation.js";
-import type { AnimationOptions } from "./types/animation.js";
+import type { AnimationOptions, RatioAnimation, EndlessAnimation, CustomAnimation } from "./types/animation/index.js";
 
 export default class ScrollAnimator
 {
@@ -22,7 +24,10 @@ export default class ScrollAnimator
             {
                 if (this._isUpdating === true)
                 {
-                    this._animations.forEach((animation) => animation.update());
+                    this._animations
+                        .filter((animation) => animation.isEnabled)
+                        .forEach((animation) => animation.update());
+
                     this._isUpdating = false;
                 }
             });
@@ -55,9 +60,13 @@ export default class ScrollAnimator
         }
     }
 
+    public animate(options: RatioAnimation): Animation;
+    public animate(options: EndlessAnimation): Animation;
+    public animate(options: CustomAnimation): Animation;
     public animate(options: AnimationOptions): Animation
     {
-        const animation = new Animation(options);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const animation = new Animation(options as any);
 
         this._animations.push(animation);
 
@@ -68,7 +77,7 @@ export default class ScrollAnimator
         const index = this._animations.indexOf(animation);
         if (index === -1)
         {
-            throw new Error(`The animation object "${animation}" doesn't exists in the animations array.`);
+            throw new ReferenceException(`The animation object "${animation}" doesn't exists in the animations array.`);
         }
 
         animation.destroy();

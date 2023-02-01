@@ -1,12 +1,14 @@
 import { inject, onScopeDispose } from "vue";
 import type { App, Plugin } from "vue";
 
+import { RuntimeException } from "@byloth/exceptions";
+
 import { InjectionKeys } from "./core.js";
 import type Animation from "./models/animation.js";
 import type { ScrollAnimate } from "./models/animation.js";
 import ScrollAnimator from "./scroll-animator.js";
 import type { ComponentInstance } from "./types/index.js";
-import type { AnimationOptions } from "./types/animation.js";
+import type { AnimationOptions } from "./types/animation/index.js";
 
 export const createScrollAnimator = (options?: unknown): Plugin =>
 {
@@ -16,7 +18,8 @@ export const createScrollAnimator = (options?: unknown): Plugin =>
             const $scrollAnimator = new ScrollAnimator(options);
             const $scrollAnimate = function(this: ComponentInstance, options: AnimationOptions): Animation
             {
-                const animation = $scrollAnimator.animate({ target: this?.$el, ...options });
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const animation = $scrollAnimator.animate({ target: this?.$el, ...options } as any);
 
                 onScopeDispose(() => $scrollAnimator.remove(animation));
 
@@ -35,7 +38,7 @@ export const useScrollAnimator = (): ScrollAnimate =>
     const $scrollAnimate = inject(InjectionKeys.$scrollAnimate);
     if (!$scrollAnimate)
     {
-        throw new Error(
+        throw new RuntimeException(
             "`useScrollAnimator` was called with no active instance. " +
             "Did you forget to install `VueScrollAnimator` plugin in your App?"
         );
