@@ -73,16 +73,7 @@ export default abstract class BaseAnimator
     {
         if (ratioValue !== this._lastRatioValue)
         {
-            const SLOW_EXECUTION_THRESHOLD = 0.25;
-
-            const start = performance.now();
             this._update(ratioValue);
-            const time = performance.now() - start;
-
-            if (time > SLOW_EXECUTION_THRESHOLD)
-            {
-                console.warn(`Slow update: execution took ${time}ms`);
-            }
 
             this._lastRatioValue = ratioValue;
         }
