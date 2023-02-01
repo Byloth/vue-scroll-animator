@@ -3,9 +3,7 @@ import { Animator, ClassAnimator, StyleAnimator } from "./animator/index.js";
 import type { ComponentInstance } from "../types/index.js";
 import type { AnimationOptions } from "../types/animation.js";
 
-export type ScrollAnimate = (this: ComponentInstance, options: AnimationOptions) => ScrollAnimation;
-
-export default class ScrollAnimation
+export default class Animation
 {
     public static get DEFAULT_OPTIONS()
     {
@@ -47,7 +45,7 @@ export default class ScrollAnimation
 
     public constructor(options: AnimationOptions)
     {
-        const _options = { ...ScrollAnimation.DEFAULT_OPTIONS, ...options };
+        const _options = { ...Animation.DEFAULT_OPTIONS, ...options };
 
         if (options.target === undefined)
         {
@@ -104,7 +102,7 @@ export default class ScrollAnimation
                     const difference = scrollValue - this._lastScrollValue;
                     const partialRatio = difference / maxDifference;
 
-                    return ScrollAnimation.Normalize(partialRatio + this._lastRatio);
+                    return Animation.Normalize(partialRatio + this._lastRatio);
                 };
             }
 
@@ -150,7 +148,7 @@ export default class ScrollAnimation
                     const difference = scrollValue - this._lastScrollValue;
                     const partialRatio = difference / maxDifference;
 
-                    return ScrollAnimation.Normalize(partialRatio + this._lastRatio);
+                    return Animation.Normalize(partialRatio + this._lastRatio);
                 };
             }
         }
@@ -208,6 +206,10 @@ export default class ScrollAnimation
             }
 
             const ratio = this._computeRatio(scrollValue);
+            if (ratio === this._lastRatio)
+            {
+                return;
+            }
 
             this._animators.forEach((animator) => animator.update(ratio));
 
@@ -223,3 +225,5 @@ export default class ScrollAnimation
         this._animators = [];
     }
 }
+
+export type ScrollAnimate = (this: ComponentInstance, options: AnimationOptions) => Animation;

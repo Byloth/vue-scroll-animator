@@ -2,15 +2,15 @@
 // Based on: https://github.com/janpaepke/ScrollMagic
 //
 
-import ScrollAnimation from "./models/scroll-animation.js";
+import Animation from "./models/animation.js";
 import type { AnimationOptions } from "./types/animation.js";
 
-export default class VueScrollAnimator
+export default class ScrollAnimator
 {
     protected _isUpdating: boolean;
     protected _requestId?: number;
 
-    protected _animations: ScrollAnimation[];
+    protected _animations: Animation[];
 
     protected _eventListener = (evt: Event): void =>
     {
@@ -55,15 +55,15 @@ export default class VueScrollAnimator
         }
     }
 
-    public animate(options: AnimationOptions): ScrollAnimation
+    public animate(options: AnimationOptions): Animation
     {
-        const animation = new ScrollAnimation(options);
+        const animation = new Animation(options);
 
         this._animations.push(animation);
 
         return animation;
     }
-    public remove(animation: ScrollAnimation): void
+    public remove(animation: Animation): void
     {
         const index = this._animations.indexOf(animation);
         if (index === -1)

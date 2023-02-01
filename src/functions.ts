@@ -2,8 +2,8 @@ import { inject, onScopeDispose } from "vue";
 import type { App, Plugin } from "vue";
 
 import { InjectionKeys } from "./core.js";
-import type ScrollAnimation from "./models/scroll-animation.js";
-import type { ScrollAnimate } from "./models/scroll-animation.js";
+import type Animation from "./models/animation.js";
+import type { ScrollAnimate } from "./models/animation.js";
 import ScrollAnimator from "./scroll-animator.js";
 import type { ComponentInstance } from "./types/index.js";
 import type { AnimationOptions } from "./types/animation.js";
@@ -14,7 +14,7 @@ export const createScrollAnimator = (options?: unknown): Plugin =>
         install: (app: App): void =>
         {
             const $scrollAnimator = new ScrollAnimator(options);
-            const $scrollAnimate = function(this: ComponentInstance, options: AnimationOptions): ScrollAnimation
+            const $scrollAnimate = function(this: ComponentInstance, options: AnimationOptions): Animation
             {
                 const animation = $scrollAnimator.animate({ target: this?.$el, ...options });
 
