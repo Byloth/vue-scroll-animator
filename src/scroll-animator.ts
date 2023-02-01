@@ -1,56 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
-
 //
 // Based on: https://github.com/janpaepke/ScrollMagic
 //
 
-import _Vue from "vue";
-
 import ScrollAnimation from "./scroll-animation.js";
 import type { AnimationOptions } from "./scroll-animation.js";
 
-interface VueScrollAnimatorData { _scrollAnimations: ScrollAnimation[]; }
-
 export default class VueScrollAnimator
 {
-    public static install(Vue: typeof _Vue, configuration?: unknown): void
-    {
-        const scrollAnimator = new VueScrollAnimator();
-
-        Vue.mixin({
-            data: (): VueScrollAnimatorData => ({ _scrollAnimations: [] }),
-            destroyed: function(): void
-            {
-                const self = (this as Vue);
-
-                for (const animation of self._scrollAnimations)
-                {
-                    scrollAnimator.remove(animation);
-                }
-
-                self._scrollAnimations = [];
-            }
-        });
-
-        Vue.prototype.$scrollAnimate = function(options: AnimationOptions): ScrollAnimation
-        {
-            const animation = scrollAnimator.animate({ target: this.$el, ...options });
-
-            this._scrollAnimations.push(animation);
-
-            return animation;
-        };
-
-        scrollAnimator.init();
-    }
-
     protected _isUpdating: boolean;
     protected _requestId?: number;
 
     protected _animations: ScrollAnimation[];
 
-    public constructor()
+    public constructor(options?: unknown)
     {
         this._isUpdating = false;
 

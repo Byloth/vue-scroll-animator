@@ -1,5 +1,5 @@
-import VueScrollAnimator from "./vue-scroll-animator.js";
-export default VueScrollAnimator;
+import ScrollAnimator from "./scroll-animator.js";
+export default ScrollAnimator;
 
 import ScrollAnimation from "./scroll-animation.js";
 import type { AnimationOptions } from "./scroll-animation.js";
