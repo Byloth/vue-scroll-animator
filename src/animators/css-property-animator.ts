@@ -1,4 +1,5 @@
-import BaseAnimator, { BaseAnimatorOptions } from "./base-animator";
+import BaseAnimator from "./base-animator.js";
+import type { BaseAnimatorOptions } from "./base-animator.js";
 
 export interface CssPropertyAnimatorOptions extends BaseAnimatorOptions
 {
@@ -17,10 +18,7 @@ export interface CssPropertyAnimatorOptions extends BaseAnimatorOptions
 
 export default class CssPropertyAnimator extends BaseAnimator
 {
-    public static DEFAULT_OPTIONS = {
-
-        unit: "px"
-    };
+    public static DEFAULT_OPTIONS = { unit: "px" };
 
     protected _name: string;
     protected _unit: string;

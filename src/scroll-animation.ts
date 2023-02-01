@@ -1,5 +1,5 @@
-import { BaseAnimator, ClassAnimator, CssPropertyAnimator } from "./animators";
-import { ClassAnimatorOptions, CssPropertyAnimatorOptions } from "./animators";
+import { BaseAnimator, ClassAnimator, CssPropertyAnimator } from "./animators/index.js";
+import type { ClassAnimatorOptions, CssPropertyAnimatorOptions } from "./animators/index.js";
 
 export interface AnimationOptions
 {

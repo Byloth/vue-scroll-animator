@@ -7,7 +7,8 @@
 
 import _Vue from "vue";
 
-import ScrollAnimation, { AnimationOptions } from "./scroll-animation";
+import ScrollAnimation from "./scroll-animation.js";
+import type { AnimationOptions } from "./scroll-animation.js";
 
 interface VueScrollAnimatorData { _scrollAnimations: ScrollAnimation[]; }
 

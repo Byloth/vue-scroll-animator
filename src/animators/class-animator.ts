@@ -1,7 +1,10 @@
-import BaseAnimator, { BaseAnimatorOptions } from "./base-animator";
+import BaseAnimator from "./base-animator.js";
+import type { BaseAnimatorOptions } from "./base-animator.js";
 
 export enum ClassAnimatorBehavior
 {
+    /* eslint-disable no-unused-vars */
+
     FROM_START = 0,
     UNTIL_START = 1,
     BETWEEN_START_END = 2,
