@@ -10,6 +10,10 @@ Desktop.ini
 
 /*.code-workspace
 
+# Documentation files
+#
+/docs/
+
 # Generated & compiled files
 #
 /*.tgz
@@ -20,9 +24,8 @@ Desktop.ini
 
 # Config files
 #
-/.babelrc
 /.editorconfig
 /.eslintrc.js
 
 /tsconfig.json
-/webpack.config.js
+/vite.config.js

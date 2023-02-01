@@ -1,26 +1,49 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "noImplicitAny": true,
-    "removeComments": true,
-    "declaration": true,
-    "importHelpers": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "strict": true,
-    "baseUrl": ".",
+    "composite": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
     "lib": [
-      "esnext",
-      "dom"
+      "ESNext",
+      "DOM",
+      "ScriptHost",
+      "WebWorker"
+    ],
+    "strict": true,
+    "jsx": "preserve",
+    "noEmit": true,
+    "noImplicitThis": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "preserveValueImports": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": true,
+    "importsNotUsedAsValues": "error",
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@docs/*": ["docs/*"]
+    },
+    "types": [
+      "vite/client",
+      "vitepress/client"
     ]
   },
-  "include": ["src/**/*.ts"],
-  "exclude": [
-    "build",
-    "dist",
-    "node_modules",
-    "types"
+  "include": [
+    "docs/**/*",
+    "docs/**/*.json",
+    "docs/**/*.vue",
+
+    "docs/.vitepress/**/*",
+    "docs/.vitepress/**/*.json",
+    "docs/.vitepress/**/*.vue",
+
+    "src/**/*",
+    "src/**/*.json",
+    "src/**/*.vue"
   ]
 }
