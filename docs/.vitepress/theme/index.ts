@@ -8,7 +8,7 @@ const VueScrollAnimatorTheme: Theme = {
 
     enhanceApp: (ctx: EnhanceAppContext): void =>
     {
-        const scrollAnimator = createScrollAnimator({ });
+        const scrollAnimator = createScrollAnimator({ isSSR: import.meta.env.SSR });
 
         ctx.app.use(scrollAnimator);
     }

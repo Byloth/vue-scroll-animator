@@ -9,15 +9,15 @@ import type { ScrollAnimate } from "./core.js";
 import ScrollAnimator from "./scroll-animator.js";
 import type Animation from "./models/animation.js";
 
-import type { ComponentInstance } from "./types/index.js";
+import type { ComponentInstance, ScrollAnimatorOptions } from "./types/index.js";
 import type { AnimationOptions } from "./types/animation/index.js";
 
-export const createScrollAnimator = (options?: unknown): Plugin =>
+export const createScrollAnimator = ({ isSSR }: ScrollAnimatorOptions): Plugin =>
 {
     return {
         install: (app: App): void =>
         {
-            const $scrollAnimator = new ScrollAnimator(options);
+            const $scrollAnimator = new ScrollAnimator({ });
             const $scrollAnimate = function(this: ComponentInstance | void, options: AnimationOptions): Animation
             {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,7 +31,7 @@ export const createScrollAnimator = (options?: unknown): Plugin =>
             app.config.globalProperties.$scrollAnimate = $scrollAnimate;
             app.provide(InjectionKeys.$scrollAnimate, $scrollAnimate);
 
-            if (!import.meta.env.SSR)
+            if (!isSSR)
             {
                 $scrollAnimator.initialize();
             }
