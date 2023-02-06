@@ -19,10 +19,7 @@ export default abstract class Animator
         if (options.mediaQuery !== undefined)
         {
             this._mediaQuery = matchMedia(options.mediaQuery);
-            this._mediaQuery.addEventListener("change", (evt) =>
-            {
-                this._enabled = evt.matches;
-            });
+            this._mediaQuery.addEventListener("change", (evt) => { this._enabled = evt.matches; });
 
             this._enabled = this._mediaQuery.matches;
         }

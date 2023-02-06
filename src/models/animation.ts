@@ -3,7 +3,6 @@ import { ValueException } from "@byloth/exceptions";
 import type Animator from "./animator/core.js";
 import { ClassAnimator, StyleAnimator } from "./animator/index.js";
 
-import type { ComponentInstance } from "../types/index.js";
 import type { AnimationOptions, RatioAnimation, EndlessAnimation, CustomAnimation } from "../types/animation/index.js";
 
 export default class Animation
@@ -199,16 +198,7 @@ export default class Animation
     public update(): void
     {
         const scrollValue = this._getScrollValue();
-        if (scrollValue === this._lastScrollValue)
-        {
-            return;
-        }
-
         const ratio = this._computeRatio(scrollValue);
-        if (ratio === this._lastRatio)
-        {
-            return;
-        }
 
         this._animators
             .filter((animator) => animator.isEnabled)
@@ -225,5 +215,3 @@ export default class Animation
         this._animators = [];
     }
 }
-
-export type ScrollAnimate = (this: ComponentInstance, options: AnimationOptions) => Animation;

@@ -9,6 +9,8 @@ import type { AnimationOptions, RatioAnimation, EndlessAnimation, CustomAnimatio
 
 export default class ScrollAnimator
 {
+    public static readonly VERSION: string = "3.0.0-rc.2";
+
     protected _isUpdating: boolean;
     protected _requestId?: number;
 

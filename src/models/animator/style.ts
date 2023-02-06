@@ -53,7 +53,8 @@ export default class StyleAnimator<T = number> extends Animator
 
         for (const [key, value] of Object.entries(_style))
         {
-            this._target.style.setProperty(key, value);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            this._target.style[key as any] = value;
         }
     }
 }

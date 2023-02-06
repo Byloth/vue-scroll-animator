@@ -13,3 +13,13 @@ export type { AnimationOptions, RatioAnimation, EndlessAnimation, CustomAnimatio
 export default ScrollAnimator;
 
 export { Animation };
+
+import type { ScrollAnimate } from "./core.js";
+
+declare module "vue"
+{
+    interface ComponentCustomProperties
+    {
+        $scrollAnimate: ScrollAnimate;
+    }
+}
