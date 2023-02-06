@@ -1,6 +1,6 @@
 import { ValueException } from "@byloth/exceptions";
 
-import type { ClassAnimatorOptions } from "@src/types/animator/index.js";
+import type { ClassAnimatorOptions } from "../../types/animator/index.js";
 
 import Animator from "./core.js";
 import { AnimatorThreshold } from "./utils.js";

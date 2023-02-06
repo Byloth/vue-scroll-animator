@@ -1,4 +1,4 @@
-import type { CoreAnimatorOptions } from "@src/types/animator/core.js";
+import type { CoreAnimatorOptions } from "../../types/animator/core.js";
 
 export default abstract class Animator
 {

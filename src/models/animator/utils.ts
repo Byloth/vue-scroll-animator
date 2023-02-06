@@ -1,4 +1,4 @@
-import type { StyleProperties } from "@src/types/animator/core.js";
+import type { StyleProperties } from "../../types/animator/core.js";
 
 export class AnimatorThreshold
 {

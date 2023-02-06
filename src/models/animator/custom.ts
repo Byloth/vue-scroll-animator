@@ -1,4 +1,4 @@
-import type { CustomAnimatorOptions } from "@src/types/animator/index.js";
+import type { CustomAnimatorOptions } from "../../types/animator/index.js";
 
 import Animator from "./core.js";
 

@@ -1,5 +1,5 @@
-import type { StyleResult } from "@src/types/animator/core.js";
-import type { StyleAnimatorOptions } from "@src/types/animator/index.js";
+import type { StyleResult } from "../../types/animator/core.js";
+import type { StyleAnimatorOptions } from "../../types/animator/index.js";
 
 import Animator from "./core.js";
 
