@@ -10,23 +10,29 @@ Desktop.ini
 
 /*.code-workspace
 
-# Generated & compiled files
-#
-/*.tgz
-
-*.d.ts
-*.js
-*.js.map
-
 # Downloadable & installable modules & components
 #
 /node_modules/
+/docs/node_modules/
+
+# Generated & compiled files
+#
+/tsconfig.tsbuildinfo
+
+/dist/
+/docs/.vitepress/cache/
+/docs/.vitepress/dist/
+
+/*.tgz
+
+# Environmental files
+#
+.env
+
+# Log files
+#
+/yarn-error.log
 
 # Not ignored
 #
 !.gitkeep
-
-# Config files
-#
-!*.config.js
-!.eslintrc.js
