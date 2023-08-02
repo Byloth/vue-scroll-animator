@@ -32,6 +32,6 @@ jobs:
           registry-url: ${{ inputs.registry-url }}
 
       - name: Package publish
-        run: npm publish --access public
+        run: npm publish --access public --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
