@@ -57,7 +57,7 @@ jobs:
 
       - id: deployment
         name: GitHub Pages deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v2
 
     environment:
       name: github-pages

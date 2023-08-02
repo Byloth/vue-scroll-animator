@@ -1,4 +1,4 @@
-import type { CoreAnimatorOptions, StyleResult } from "./core.js";
+import type { CoreAnimatorOptions, Style } from "./core.js";
 
 export interface ClassAnimatorOptions extends CoreAnimatorOptions
 {
@@ -12,7 +12,7 @@ export interface StyleAnimatorOptions<T = number> extends CoreAnimatorOptions
     endValue?: number;
 
     computeValue?: (ratio: number) => T;
-    computeStyle: (value: T) => StyleResult;
+    computeStyle: (value: T) => Style;
 }
 export interface CustomAnimatorOptions extends CoreAnimatorOptions
 {

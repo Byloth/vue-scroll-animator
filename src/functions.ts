@@ -20,8 +20,7 @@ export const createScrollAnimator = ({ isSSR }: ScrollAnimatorOptions): Plugin =
             const $scrollAnimator = new ScrollAnimator({ });
             const $scrollAnimate = function(this: ComponentInstance | void, options: AnimationOptions): Animation
             {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const animation = $scrollAnimator.animate({ target: this?.$el, ...options } as any);
+                const animation = $scrollAnimator.animate({ target: this?.$el, ...options });
 
                 onScopeDispose(() => $scrollAnimator.remove(animation));
 

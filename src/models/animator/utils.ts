@@ -1,4 +1,4 @@
-import type { StyleProperties } from "../../types/animator/core.js";
+import type { StyleProperty } from "../../types/animator/core.js";
 
 export class AnimatorThreshold
 {
@@ -30,7 +30,7 @@ export class AnimatorThreshold
 
 export class StyleComposer
 {
-    public static Numeric(property: StyleProperties, unit = "")
+    public static Numeric(property: StyleProperty, unit = "")
     {
         return (value: number) => ({ property: `${value}${unit}` });
     }

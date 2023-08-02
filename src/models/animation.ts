@@ -53,6 +53,7 @@ export default class Animation
     public constructor(options: RatioAnimation);
     public constructor(options: EndlessAnimation);
     public constructor(options: CustomAnimation);
+    public constructor(options: AnimationOptions);
     public constructor(options: AnimationOptions)
     {
         const _options = { ...Animation.DEFAULT_OPTIONS, ...options };
@@ -164,7 +165,7 @@ export default class Animation
             //     this._getScrollValue = (): number => element.scrollLeft;
             // }
 
-            this._getScrollValue = (): number => window.pageXOffset;
+            this._getScrollValue = (): number => window.scrollX;
         }
         //
         // TODO: Gestire lo scroll legato ad un elemento specifico.
@@ -176,7 +177,7 @@ export default class Animation
             //     this._getScrollValue = (): number => element.scrollTop;
             // }
 
-            this._getScrollValue = (): number => window.pageYOffset;
+            this._getScrollValue = (): number => window.scrollY;
         }
         else
         {

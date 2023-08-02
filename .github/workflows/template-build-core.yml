@@ -1,4 +1,4 @@
-name: "<build:core template>"
+name: "<template:build:core>"
 on:
   workflow_call:
 

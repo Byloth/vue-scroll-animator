@@ -9,37 +9,39 @@ import type { AnimationOptions, RatioAnimation, EndlessAnimation, CustomAnimatio
 
 export default class ScrollAnimator
 {
-    public static readonly VERSION: string = "3.0.0-rc.4";
+    public static readonly VERSION: string = "3.0.0-rc.5";
 
     protected _isUpdating: boolean;
     protected _requestId?: number;
 
     protected _animations: Animation[];
 
-    protected _eventListener = (evt: Event): void =>
-    {
-        if (this._isUpdating === false)
-        {
-            this._isUpdating = true;
-
-            this._requestId = window.requestAnimationFrame((timestamp: number) =>
-            {
-                if (this._isUpdating === true)
-                {
-                    this._animations
-                        .filter((animation) => animation.isEnabled)
-                        .forEach((animation) => animation.update());
-
-                    this._isUpdating = false;
-                }
-            });
-        }
-    };
+    protected _eventListener: (evt: Event) => void;
 
     public constructor(options?: unknown)
     {
         this._isUpdating = false;
         this._animations = [];
+
+        this._eventListener = (evt: Event): void =>
+        {
+            if (this._isUpdating === false)
+            {
+                this._isUpdating = true;
+
+                this._requestId = window.requestAnimationFrame((timestamp: number) =>
+                {
+                    if (this._isUpdating === true)
+                    {
+                        this._animations
+                            .filter((animation) => animation.isEnabled)
+                            .forEach((animation) => animation.update());
+
+                        this._isUpdating = false;
+                    }
+                });
+            }
+        };
     }
 
     public initialize(): void
@@ -65,10 +67,10 @@ export default class ScrollAnimator
     public animate(options: RatioAnimation): Animation;
     public animate(options: EndlessAnimation): Animation;
     public animate(options: CustomAnimation): Animation;
+    public animate(options: AnimationOptions): Animation;
     public animate(options: AnimationOptions): Animation
     {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const animation = new Animation(options as any);
+        const animation = new Animation(options);
 
         this._animations.push(animation);
 

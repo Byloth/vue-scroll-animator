@@ -5,16 +5,9 @@ export interface CoreAnimatorOptions
     mediaQuery?: string;
 }
 
-type PropertiesToOmit = number |
-    "length" |
-    "parentRule" |
-    "getPropertyPriority" |
-    "getPropertyValue" |
-    "item" |
-    "removeProperty" |
-    "setProperty";
+type StringKeys<T> = { [K in keyof T]: T[K] extends string ? K : never; }[keyof T];
+type OnlyStrings<T> = Omit<Pick<T, StringKeys<T>>, number>;
 
-type StyleDefinition = Omit<CSSStyleDeclaration, PropertiesToOmit>;
-
-export type StyleProperties = keyof StyleDefinition;
-export type StyleResult = { [P in StyleProperties]?: string };
+type StyleDefinition = OnlyStrings<CSSStyleDeclaration>;
+export type StyleProperty = keyof StyleDefinition;
+export type Style = Partial<StyleDefinition>;
