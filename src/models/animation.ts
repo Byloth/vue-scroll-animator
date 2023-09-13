@@ -1,11 +1,13 @@
 import { ValueException } from "@byloth/exceptions";
 
-import type Animator from "./animator/core.js";
-import { ClassAnimator, StyleAnimator } from "./animator/index.js";
+import UpdatableCore from "./core";
 
-import type { AnimationOptions, RatioAnimation, EndlessAnimation, CustomAnimation } from "../types/animation/index.js";
+import type Animator from "./animator/core";
+import { ClassAnimator, StyleAnimator, CustomAnimator } from "./animator";
 
-export default class Animation
+import type { AnimationOptions, RatioAnimation, EndlessAnimation, CustomAnimation } from "../types/animation";
+
+export default class Animation extends UpdatableCore
 {
     public static get DEFAULT_OPTIONS()
     {
@@ -36,7 +38,6 @@ export default class Animation
         return value;
     }
 
-    protected _enabled: boolean;
     protected _animators: Animator[];
 
     protected _lastRatio: number;
@@ -45,22 +46,13 @@ export default class Animation
     protected _computeRatio: (scrollValue: number) => number;
     protected _getScrollValue: (element?: Element) => number;
 
-    public get isEnabled(): boolean
-    {
-        return this._enabled;
-    }
-
     public constructor(options: RatioAnimation);
     public constructor(options: EndlessAnimation);
     public constructor(options: CustomAnimation);
-    public constructor(options: AnimationOptions);
     public constructor(options: AnimationOptions)
     {
         const _options = { ...Animation.DEFAULT_OPTIONS, ...options };
-        if (_options.target === undefined)
-        {
-            throw new ValueException("'target' option must be correctly valorized.");
-        }
+        super(_options);
 
         this._enabled = true;
         this._animators = [];
@@ -76,9 +68,10 @@ export default class Animation
         {
             this._animators.push(new StyleAnimator({ target: _options.target, ...styleOptions }));
         }
-        //
-        // TODO: Handle `_options.customs`
-        //
+        for (const customOptions of _options.customs)
+        {
+            this._animators.push(new CustomAnimator({ target: _options.target, ...customOptions }));
+        }
 
         if (!this._animators.length)
         {
@@ -187,15 +180,6 @@ export default class Animation
         this.update();
     }
 
-    public enable(): void
-    {
-        this._enabled = true;
-    }
-    public disable(): void
-    {
-        this._enabled = false;
-    }
-
     public update(): void
     {
         const scrollValue = this._getScrollValue();
@@ -211,8 +195,9 @@ export default class Animation
 
     public destroy(): void
     {
-        this.disable();
+        super.destroy();
 
+        this._animators.forEach((animator) => animator.destroy());
         this._animators = [];
     }
 }

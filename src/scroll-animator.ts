@@ -4,8 +4,8 @@
 
 import { ReferenceException } from "@byloth/exceptions";
 
-import Animation from "./models/animation.js";
-import type { AnimationOptions, RatioAnimation, EndlessAnimation, CustomAnimation } from "./types/animation/index.js";
+import Animation from "./models/animation";
+import type { AnimationOptions, RatioAnimation, EndlessAnimation, CustomAnimation } from "./types/animation";
 
 export default class ScrollAnimator
 {

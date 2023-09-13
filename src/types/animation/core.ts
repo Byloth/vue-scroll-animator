@@ -1,10 +1,9 @@
-import type { Orientation } from "../index.js";
-import type { ClassAnimatorOptions, CustomAnimatorOptions, StyleAnimatorOptions } from "../animator/index.js";
+import type { UpdatableCoreOptions } from "../core";
+import type { Orientation } from "..";
+import type { ClassAnimatorOptions, CustomAnimatorOptions, StyleAnimatorOptions } from "../animator";
 
-interface PartialAnimation
+interface PartialAnimation extends UpdatableCoreOptions
 {
-    target?: HTMLElement;
-
     orientation?: Orientation;
 }
 

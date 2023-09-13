@@ -1,8 +1,8 @@
-export interface CoreAnimatorOptions
-{
-    target?: HTMLElement;
+import type { UpdatableCoreOptions } from "../core";
 
-    mediaQuery?: string;
+export interface CoreAnimatorOptions extends UpdatableCoreOptions
+{
+    target: HTMLElement;
 }
 
 type StringKeys<T> = { [K in keyof T]: T[K] extends string ? K : never; }[keyof T];

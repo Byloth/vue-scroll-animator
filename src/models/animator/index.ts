@@ -1,5 +1,5 @@
-import ClassAnimator from "./class.js";
-import StyleAnimator from "./style.js";
-import CustomAnimator from "./custom.js";
+import ClassAnimator from "./class";
+import StyleAnimator from "./style";
+import CustomAnimator from "./custom";
 
 export { ClassAnimator, StyleAnimator, CustomAnimator };

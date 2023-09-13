@@ -1,7 +1,7 @@
 import type { Theme } from "vitepress";
 
 import DefaultTheme from "vitepress/theme";
-import { createScrollAnimator } from "@src/functions.js";
+import { createScrollAnimator } from "@src/functions";
 
 const VueScrollAnimatorTheme: Theme = {
     ...DefaultTheme,

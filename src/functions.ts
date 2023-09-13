@@ -3,14 +3,14 @@ import type { App, Plugin } from "vue";
 
 import { RuntimeException } from "@byloth/exceptions";
 
-import { InjectionKeys } from "./core.js";
-import type { ScrollAnimate } from "./core.js";
+import { InjectionKeys } from "./core";
+import type { ScrollAnimate } from "./core";
 
-import ScrollAnimator from "./scroll-animator.js";
-import type Animation from "./models/animation.js";
+import ScrollAnimator from "./scroll-animator";
+import type Animation from "./models/animation";
 
-import type { ComponentInstance, ScrollAnimatorOptions } from "./types/index.js";
-import type { AnimationOptions } from "./types/animation/index.js";
+import type { ComponentInstance, ScrollAnimatorOptions } from "./types";
+import type { AnimationOptions } from "./types/animation";
 
 export const createScrollAnimator = ({ isSSR }: ScrollAnimatorOptions): Plugin =>
 {

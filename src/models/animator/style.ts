@@ -1,7 +1,7 @@
-import type { Style, StyleProperty } from "../../types/animator/core.js";
-import type { StyleAnimatorOptions } from "../../types/animator/index.js";
+import type { StyleResult } from "../../types/animator/core";
+import type { StyleAnimatorOptions } from "../../types/animator";
 
-import Animator from "./core.js";
+import Animator from "./core";
 
 export default class StyleAnimator<T = number> extends Animator
 {
@@ -11,7 +11,7 @@ export default class StyleAnimator<T = number> extends Animator
     }
 
     protected _computeValue: (ratio: number) => T;
-    protected _computeStyle: (value: T) => Style;
+    protected _computeStyle: (value: T) => StyleResult;
 
     public constructor(options: StyleAnimatorOptions<T>)
     {
@@ -53,9 +53,8 @@ export default class StyleAnimator<T = number> extends Animator
 
         for (const [key, value] of Object.entries(_style))
         {
-            const property = key as StyleProperty;
-
-            this._target.style[property] = value;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            this._target.style[key as any] = value;
         }
     }
 }

@@ -1,6 +1,6 @@
-import type { CustomAnimatorOptions } from "../../types/animator/index.js";
+import type { CustomAnimatorOptions } from "../../types/animator";
 
-import Animator from "./core.js";
+import Animator from "./core";
 
 export default class CustomAnimator extends Animator
 {

@@ -1,4 +1,4 @@
-import type { CoreAnimatorOptions, Style } from "./core.js";
+import type { CoreAnimatorOptions, Style } from "./core";
 
 export interface ClassAnimatorOptions extends CoreAnimatorOptions
 {

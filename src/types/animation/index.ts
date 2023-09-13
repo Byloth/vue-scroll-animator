@@ -1,4 +1,4 @@
-import type { CoreAnimation } from "./core.js";
+import type { CoreAnimation } from "./core";
 
 export type RatioAnimation = CoreAnimation &
 {
